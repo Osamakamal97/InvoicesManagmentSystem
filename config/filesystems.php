@@ -44,8 +44,8 @@ return [
 
         'invoices' => [
             'driver' => 'local',
-            'root' => public_path() . '/storage/invoices',
-            'url' => env('APP_URL') . '/public',
+            'root' => storage_path('app/invoices'),
+            'url' => env('APP_URL') . '/storage',
             'visibility' => 'public',
         ],
 
@@ -74,6 +74,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('storage/invoices') => storage_path('app/invoices'),
     ],
 
 ];

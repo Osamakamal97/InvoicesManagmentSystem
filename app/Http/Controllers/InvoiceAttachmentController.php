@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InvoiceAttachmentRequest;
 use App\Models\InvoiceAttachment;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class InvoiceAttachmentController extends Controller
 {
@@ -14,7 +17,6 @@ class InvoiceAttachmentController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -33,9 +35,20 @@ class InvoiceAttachmentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(InvoiceAttachmentRequest $request)
     {
-        //
+        if ($request->has('attachments')) {
+            $file_paths = uploadImage('invoices', $request->attachments, $request->invoice_number);
+            // store invoice attachment
+            foreach ($file_paths as $path)
+                InvoiceAttachment::create([
+                    'file_path' => $path,
+                    'invoice_id' => $request->invoice_id,
+                    'created_by' => 'test'
+                ]);
+            return redirect()->back()->with('success', 'تم رفع المرفقات بنجاح.');
+        }
+        return redirect()->back();
     }
 
     /**
@@ -47,6 +60,28 @@ class InvoiceAttachmentController extends Controller
     public function show(InvoiceAttachment $invoiceAttachment)
     {
         //
+    }
+
+    public function getAttachment($invoice_number, $attachment)
+    {
+        try {
+            $file_path = $invoice_number . '/' . $attachment;
+            // $attachment = Storage::disk('invoices')->get($file_path);
+            $attachment = Storage::getDriver()->getAdapter()->applyPathPrefix('invoices/' . $file_path);
+            return response()->file($attachment);
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'حصل خطأ في عرض المرفقات.');
+        }
+    }
+
+    public function downloadAttachment($invoice_number, $attachment)
+    {
+        try {
+            $file_path = $invoice_number . '/' . $attachment;
+            return Storage::download('invoices/' . $file_path);
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'حصل خطأ في عرض المرفقات.');
+        }
     }
 
     /**
@@ -80,6 +115,11 @@ class InvoiceAttachmentController extends Controller
      */
     public function destroy(InvoiceAttachment $invoiceAttachment)
     {
-        //
+        $file_path = str_replace('storage/app/invoices/', '', $invoiceAttachment->file_path);
+        // delete attachment from file
+        Storage::disk('invoices')->delete($file_path);
+        // delete invoice attachment form database
+        $invoiceAttachment->delete();
+        return redirect()->back()->with('error', 'تم حذف المُرفَق بنجاح.');
     }
 }

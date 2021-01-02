@@ -22,10 +22,6 @@
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/telephoneinput/telephoneinput-rtl.css')}}">
 <!--Internal Sumoselect css-->
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect-rtl.css')}}">
-<!---Internal  Prism css-->
-<link href="{{URL::asset('assets/plugins/prism/prism.css')}}" rel="stylesheet">
-<!--- Custom-scroll -->
-<link href="{{URL::asset('assets/plugins/custom-scroll/jquery.mCustomScrollbar.css')}}" rel="stylesheet">
 @endsection
 @section('page-header')
 <!-- breadcrumb -->
@@ -50,15 +46,9 @@
                     <h4 class="card-title mg-b-0">الفواتير</h4>
                     <i class="mdi mdi-dots-horizontal text-gray"></i>
                 </div>
-                <div class="row">
-                    <div class="col-sm-6 col-md-4 col-xl-2 mg-t-20">
-                        <a class="btn btn-outline-primary btn-block" href="{{ route('invoices.create') }}">إنشاء فاتورة
-                            جديد</a>
-                    </div>
-                    <div class="col-sm-6 col-md-4 col-xl-2 mg-t-20">
-                        <a class="btn btn-outline-primary btn-block" href="{{ route('invoices.export') }}" target="_blank">
-                            تصدير البيانات</a>
-                    </div>
+                <div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
+                    <a class="btn btn-outline-primary btn-block" href="{{ route('invoices.create') }}">إنشاء فاتورة
+                        جديد</a>
                 </div>
             </div>
             <div class="card-body">
@@ -67,14 +57,14 @@
                         <thead>
                             <tr>
                                 <th class="wd-5p border-bottom-0">#</th>
-                                <th class="wd-12p border-bottom-0">رقم الفاتورة</th>
-                                <th class="wd-12p border-bottom-0">تاريخ الفاتورة</th>
-                                <th class="wd-12p border-bottom-0">تاريخ الاستحقاق</th>
-                                <th class="wd-10p border-bottom-0">المنتج</th>
-                                <th class="wd-10p border-bottom-0">القسم</th>
+                                <th class="wd-10p border-bottom-0">رقم الفاتورة</th>
+                                <th class="wd-10p border-bottom-0">تاريخ الفاتورة</th>
+                                <th class="wd-10p border-bottom-0">تاريخ الاستحقاق</th>
+                                <th class="wd-5p border-bottom-0">المنتج</th>
+                                <th class="wd-5p border-bottom-0">القسم</th>
                                 <th class="wd-10p border-bottom-0">الرصيد الكلي</th>
                                 <th class="wd-10p border-bottom-0">الحالة</th>
-                                <th class="border-bottom-0">العمليات</th>
+                                <th class="wd-10p border-bottom-0">العمليات</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -85,20 +75,8 @@
                                 <td>{{ $invoice->invoice_date }}</td>
                                 <td>{{ $invoice->due_date }}</td>
                                 <td>{{ $invoice->product->name }}</td>
-                                <td>
-                                    @if ($is_archive)
-                                    <a href="#" style="color: black"
-                                        onclick="event.preventDefault();document.getElementById('invoiceDetails').submit();">
+                                <td><a href="{{ route('invoiceDetails.index',$invoice->id) }}" style="color: black">
                                         {{ $invoice->section->name }}</a>
-                                    <form action="{{ route('archiveInvoiceDetails.index', $invoice->id) }}"
-                                        id="invoiceDetails" method="POST" style="display: none">
-                                        @csrf
-                                        <input type="hidden" name="archive_invoice_id" value="{{ $invoice->id }}">
-                                    </form>
-                                    @else
-                                    <a href="{{ route('invoiceDetails.index', $invoice->id) }}" style="color: black">
-                                        {{ $invoice->section->name }}</a>
-                                    @endif
                                 </td>
                                 <td>${{ $invoice->total }}</td>
                                 <td class="text-center">
@@ -120,43 +98,17 @@
                                     </span>
                                     @endif
                                 </td>
-                                <td class="btn-icon-list ">
-                                    @if ($is_archive)
-                                    <span data-toggle="tooltip" data-placement="top" title="إلغاء أرشفة الفاتورة"
-                                        style="margin-left: 5px;margin-right: 5px">
-                                        <a href="#unarchiveModal" class="btn btn-info btn-sm btn-icon"
-                                            data-effect="effect-flip-horizontal" data-toggle="modal"
-                                            data-id="{{ $invoice->id }}" data-name="{{ $invoice->invoice_number }}">
-                                            <i class="las la-inbox"></i></a>
-                                    </span>
-                                    <span data-toggle="tooltip" data-placement="top" title="حذف الفاتورة نهائياً">
-                                        <a href="#deleteModal" class="btn btn-danger btn-sm btn-icon"
-                                            data-effect="effect-flip-horizontal" data-toggle="modal"
-                                            data-id="{{ $invoice->id }}" data-name="{{ $invoice->invoice_number }}">
-                                            <i class="typcn typcn-delete-outline"></i></a>
-                                    </span>
-                                    @else
+                                <td class="btn-icon-list">
                                     <a href="{{ route('invoices.editStatus' ,$invoice->id) }}"
-                                        class="btn btn-primary btn-sm btn-icon" title="تعديل حالة الدفع"
-                                        data-toggle="tooltip" data-placement="top">
+                                        class="btn btn-info btn-sm btn-icon">
                                         <i class="las la-file-invoice-dollar"></i></a>
-                                    <a href="{{ route('invoices.edit' ,$invoice->id) }}" data-toggle="tooltip"
-                                        data-placement="top" title="تعديل الفاتورة"
+                                    <a href="{{ route('invoices.edit' ,$invoice->id) }}"
                                         class="btn btn-warning btn-sm btn-icon">
                                         <i class="typcn typcn-edit"></i></a>
-                                    <span data-toggle="tooltip" data-placement="top" title="أرشفة الفاتورة"
-                                        style="margin-left: 5px;margin-right: 5px">
-                                        <a href="#archiveModal" class="btn btn-info btn-sm btn-icon"
-                                            data-effect="effect-flip-horizontal" data-toggle="modal"
-                                            data-id="{{ $invoice->id }}" data-name="{{ $invoice->invoice_number }}">
-                                            <i class="las la-archive"></i></a>
-                                    </span>
-                                    <a href="{{ route('invoices.print',$invoice->id) }}"
-                                        class="btn btn-light btn-sm btn-icon" data-effect="effect-flip-horizontal"
-                                        data-toggle="tooltip" data-placement="top" title="طباعة فاتورة"
-                                        style="margin-left: 5px;margin-right: 5px" data-id="{{ $invoice->id }}">
-                                        <i class="las la-print"></i></a>
-                                    @endif
+                                    <a href="#deleteModal" class="btn btn-danger btn-sm btn-icon"
+                                        data-effect="effect-flip-horizontal" data-toggle="modal"
+                                        data-id="{{ $invoice->id }}" data-name="{{ $invoice->name }}">
+                                        <i class="typcn typcn-delete-outline"></i></a>
                                 </td>
                             </tr>
                             @endforeach
@@ -168,60 +120,6 @@
     </div>
     <!--/div-->
     <!-- Modal effects -->
-    <div class="modal" id="archiveModal">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content modal-content-demo">
-                <div class="modal-header">
-                    <h6 class="modal-title">
-                        أرشفة الفاتورة
-                    </h6>
-                    <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
-                            aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    <p class="mg-b-20 mg-x-20"> هل أنت متأكد من أرشفة الفاتورة صاحبة الرقم <span
-                            id="invoice_number_archive" style="font-weight: bold"></span> ؟</p>
-                    <form class="form-horizontal" action="{{ route('invoices.archive', 0) }}" id="submit-archive-data"
-                        method="POST">
-                        @csrf
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn ripple btn-success" type="submit"
-                        onclick="event.preventDefault();document.getElementById('submit-archive-data').submit()">أرشفة</button>
-                    <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">إلغاء</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal" id="unarchiveModal">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content modal-content-demo">
-                <div class="modal-header">
-                    <h6 class="modal-title">
-                        إلغاء أرشفة الفاتورة
-                    </h6>
-                    <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
-                            aria-hidden="true">&times;</span></button>
-                </div>
-                <div class="modal-body">
-                    <p class="mg-b-20 mg-x-20"> هل أنت متأكد من إلغاء أرشفة الفاتورة صاحبة الرقم <span
-                            id="invoice_number_unarchive" style="font-weight: bold"></span> ؟</p>
-                    <form class="form-horizontal" action="{{ route('invoices.unarchive', 0) }}"
-                        id="submit-unarchive-data" method="POST">
-                        @csrf
-                        <input type="hidden" name="invoice_id" id="invoice_id">
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn ripple btn-success" type="submit"
-                        onclick="event.preventDefault();document.getElementById('submit-unarchive-data').submit()">عدم
-                        الأرشفة</button>
-                    <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">إلغاء</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="modal" id="deleteModal">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-content-demo">
@@ -233,8 +131,8 @@
                             aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mg-b-20 mg-x-20"> هل أنت متأكد من حذف الفاتورة صاحبة الرقم <span
-                            id="invoice_number_delete" style="font-weight: bold"></span> ؟</p>
+                    <p class="mg-b-20 mg-x-20"> هل أنت متأكد من حذف الفاتورة <span id="invoice_name"
+                            style="font-weight: bold"></span> ؟</p>
                     <form class="form-horizontal" action="{{ route('invoices.destroy', 0) }}" id="submit-delete-data"
                         method="POST">
                         @csrf
@@ -302,36 +200,25 @@
 <script src="{{URL::asset('assets/js/form-elements.js')}}"></script>
 <!--Internal Sumoselect js-->
 <script src="{{URL::asset('assets/plugins/sumoselect/jquery.sumoselect.js')}}"></script>
-<!--Internal  Clipboard js-->
-<script src="{{URL::asset('assets/plugins/clipboard/clipboard.min.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/clipboard/clipboard.js')}}"></script>
-<!-- Internal Prism js-->
-<script src="{{URL::asset('assets/plugins/prism/prism.js')}}"></script>
 <script>
-    $('#archiveModal').on('show.bs.modal', function(event){
-        var button = $(event.relatedTarget);
-        var id = button.data('id');
-        var name = button.data('name');
-        var modal = $(this);
-        document.getElementById('submit-archive-data').action = "{{ route('invoices.archive', '') }}/"+id;
-        document.getElementById('invoice_number_archive').textContent = name;
-    });
-    $('#unarchiveModal').on('show.bs.modal', function(event){
-        var button = $(event.relatedTarget);
-        var id = button.data('id');
-        var name = button.data('name');
-        var modal = $(this);
-        document.getElementById('submit-unarchive-data').action = "{{ route('invoices.unarchive','') }}/"+id;
-        document.getElementById('invoice_number_unarchive').textContent = name;
-        document.getElementById('invoice_id').value = id;
-    });
+    // $('#editModal').on('show.bs.modal', function(event){
+    //     var button = $(event.relatedTarget);
+    //     var id = button.data('id');
+    //     var name = button.data('name');
+    //     var description = button.data('description');
+    //     var modal = $(this);
+    //     modal.find('.modal-body #id').val(id);
+    //     modal.find('.modal-body #name').val(name);
+    //     modal.find('.modal-body #description').val(description);
+    //     document.getElementById('submit-edit-data').action = "{{ route('invoices.update','') }}/"+id;
+    // });
     $('#deleteModal').on('show.bs.modal', function(event){
         var button = $(event.relatedTarget);
         var id = button.data('id');
         var name = button.data('name');
         var modal = $(this);
         document.getElementById('submit-delete-data').action = "{{ route('invoices.destroy','') }}/"+id;
-        document.getElementById('invoice_number_delete').textContent = name;
+        document.getElementById('invoice_name').textContent = name;
     });
 </script>
 @endsection

@@ -25,7 +25,7 @@ class ProductFactory extends Factory
         return [
             'name' => $this->faker->firstName,
             'description' => $this->faker->text(200),
-            'section_id' => $this->faker->numberBetween(1, Section::all()->count()),
+            'section_id' => Section::inRandomOrder()->limit(1)->first('id'),
         ];
     }
 }

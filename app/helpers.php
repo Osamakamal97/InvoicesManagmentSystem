@@ -1,9 +1,14 @@
 <?php
 
-function uploadImage($folder, $image)
+use Illuminate\Support\Facades\Storage;
+
+function uploadImage($folder, $files, $invoice_number)
 {
-    $image->store('/', $folder);
-    $file_name = $image->hashName();
-    $path = 'images/' . $folder . '/' . $file_name;
-    return $path;
+    $paths = [];
+    foreach ($files as $file) {
+        $file_name = $file->hashName();
+        Storage::disk('invoices')->put($invoice_number, $file);
+        array_push($paths, 'storage/app/' . $folder . '/' . $invoice_number . '/' . $file_name);
+    }
+    return $paths;
 }

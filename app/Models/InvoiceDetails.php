@@ -4,35 +4,41 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class InvoiceDetails extends Model
+class InvoiceDetails extends Main
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'invoice_id',
-        'invoice_number',
-        'invoice_date',
-        'due_date',
-        'product_id',
-        'section_id',
+        'payment_date',
         'status',
         'note',
         'user_id',
     ];
-    
+
+    // Mutator
+
     public function setUserIdAttribute()
     {
         $this->attributes['user_id'] = auth()->user()->id;
     }
 
-    public function setInvoiceDateAttribute($invoice_date)
-    { 
-        $this->attributes['invoice_date'] = Carbon::parse($invoice_date)->format('Y-m-d');
-    }   
-    public function setDueDateAttribute($due_date)
-    { 
-        $this->attributes['due_date'] = Carbon::parse($due_date)->format('Y-m-d');
+    public function setPaymentDateAttribute($payment_date)
+    {
+        $this->attributes['payment_date'] = Carbon::parse($payment_date)->format('Y-m-d');
+    }
+
+    // Relations
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
     }
 }

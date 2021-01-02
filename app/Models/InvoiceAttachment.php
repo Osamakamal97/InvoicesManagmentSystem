@@ -19,4 +19,9 @@ class InvoiceAttachment extends Model
     {
         $this->attributes['created_by'] = auth()->user()->name;
     }
+
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class);
+    }
 }

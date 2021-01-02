@@ -24,20 +24,21 @@ class InvoiceRequest extends FormRequest
     public function rules()
     {
         return [
-            'invoice_number' => 'required',
+            'invoice_number' => 'required|unique:invoices,invoice_number,' . ($this->method() != 'POST' ? $this->invoice->id : null),
             'invoice_date' => 'required|date',
             'due_date' => 'required|date',
             'product_id' => 'required|not_in:0',
             'section_id' => 'required|not_in:0',
+            'collection_amount' => 'nullable|numeric',
+            'commission_amount' => 'required|numeric',
             'discount' => 'required|numeric',
             'rate_vat' => 'required|not_in:0',
             'value_vat' => 'required|numeric',
             'total' => 'required|numeric',
-            'collection_amount' => 'nullable|numeric', 
-            'commission_amount' => 'required|numeric',
             'note' => 'nullable',
-            'user_id'=>'nullable',
-            'attachment' => 'required|mimes:pdf,jpeg,png,jpg'
+            'user_id' => 'nullable',
+            'attachments' => 'nullable|array',
+            'attachments.*' => 'mimes:pdf,jpeg,png,jpg',
         ];
     }
 }

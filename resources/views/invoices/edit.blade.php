@@ -13,11 +13,6 @@
 <link href="{{URL::asset('assets/plugins/fancyuploder/fancy_fileupload.css')}}" rel="stylesheet" />
 <!--Internal Sumoselect css-->
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect-rtl.css')}}">
-<style>
-    .ff_fileupload_wrap table.ff_fileupload_uploads td.ff_fileupload_actions button.ff_fileupload_start_upload {
-        display: none;
-    }
-</style>
 @endsection
 @section('page-header')
 <!-- breadcrumb -->
@@ -25,7 +20,7 @@
     <div class="my-auto">
         <div class="d-flex">
             <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                إنشاء فاتورة</span>
+                تعديل فاتورة</span>
         </div>
     </div>
 </div>
@@ -37,19 +32,21 @@
     <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
         <div class="card box-shadow-0 ">
             <div class="card-header">
-                <h4 class="card-title mb-1">إنشاء فاتورة</h4>
+                <h4 class="card-title mb-1">تعديل فاتورة</h4>
             </div>
             <div class="card-body pt-0">
-                <form action="{{ route('invoices.store') }}" method="POST" data-parsley-validate=""
+                <form action="{{ route('invoices.update', $invoice->id) }}" method="POST" data-parsley-validate=""
                     enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
                     <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                     <div class="row row-sm">
                         <div class="form-group col-lg-4">
                             <label for="invoiceNumber">رقم الفاتورة <span class="tx-danger">*</span></label>
-                            <input type="text" name="invoice_number" autofocus
+                            <input type="text" name="invoice_number"
                                 class="form-control @error('invoice_number') parsley-error @enderror" id="invoiceNumber"
-                                placeholder="رقم الفاتورة" value="{{ old('invoice_number') }}">
+                                placeholder="رقم الفاتورة"
+                                value="{{ old('invoice_number') == null ? $invoice->invoice_number : old('invoice_number') }}">
                             @error('invoice_number')
                             <ul class="parsley-errors-list filled" id="parsley-id-5">
                                 <li class="parsley-required">{{ $message }}</li>
@@ -65,7 +62,7 @@
                                     </div>
                                 </div>
                                 <input name="invoice_date" placeholder="MM/DD/YYYY" type="text" id="invoiceDate"
-                                    value="{{ old('invoice_date') }}"
+                                    value="{{ old('invoice_date') == null ? $invoice->invoice_date : old('invoice_date') }}"
                                     class="form-control fc-datepicker @error('invoice_date') parsley-error @enderror">
                             </div>
                             @error('invoice_date')
@@ -83,7 +80,7 @@
                                     </div>
                                 </div>
                                 <input name="due_date" placeholder="MM/DD/YYYY" type="text" id="dueDate"
-                                    value="{{ old('due_date') }}"
+                                    value="{{ old('due_date') == null ? $invoice->due_date : old('due_date') }}"
                                     class="form-control fc-datepicker @error('due_date') parsley-error @enderror">
                             </div>
                             @error('due_date')
@@ -103,8 +100,9 @@
                                     إختر قسم
                                 </option>
                                 @foreach ($sections as $key => $section)
-                                <option value="{{ $section->id }}" class="selected_section"
-                                    {{ old('section_id') == $section->id ? 'selected' : '' }}>
+                                <option value="{{ $section->id }}" class="selected_section" {{ old('section_id') == null ?
+                                        ($invoice->section_id == $section->id ? 'selected' : '') :
+                                        (old('section_id') == $section->id ? 'selected' : '' ) }}>
                                     {{ $section->name }}
                                 </option>
                                 @endforeach
@@ -131,8 +129,8 @@
                             <label for="invoiceCollectionAmount">مبلغ التحصيل </label>
                             <input type="text" name="collection_amount"
                                 class="form-control @error('collection_amount') parsley-error @enderror"
-                                id="invoiceCollectionAmount" placeholder="مبلغ التحصيل"
-                                value="{{ old('collection_amount') }}"
+                                id="invoiceCollectionAmount" placeholder="مبلغ التحصيل" onchange="myFunction()"
+                                value="{{ old('collection_amount') == null ? $invoice->collection_amount : old('collection_amount') }}"
                                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             @error('collection_amount')
                             <ul class="parsley-errors-list filled" id="parsley-id-5">
@@ -146,7 +144,8 @@
                             <label for="invoiceCommissionAmount">مبلغ العمولة <span class="tx-danger">*</span></label>
                             <input type="text" name="commission_amount"
                                 class="form-control @error('commission_amount') parsley-error @enderror"
-                                id="commission_amount" placeholder="مبلغ العمولة" value="{{ old('commission_amount') }}"
+                                id="commission_amount" placeholder="مبلغ العمولة" onchange="myFunction()"
+                                value="{{ old('commission_amount') == null ? $invoice->commission_amount : old('commission_amount') }}"
                                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             @error('commission_amount')
                             <ul class="parsley-errors-list filled" id="parsley-id-5">
@@ -158,7 +157,8 @@
                             <label for="invoiceDiscount">الخصم <span class="tx-danger">*</span></label>
                             <input type="text" name="discount"
                                 class="form-control @error('discount') parsley-error @enderror" id="discount"
-                                placeholder="الخصم" value="{{ old('discount') }}"
+                                placeholder="الخصم" onchange="myFunction()"
+                                value="{{ old('discount') == null ? $invoice->discount : old('discount') }}"
                                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             @error('discount')
                             <ul class="parsley-errors-list filled" id="parsley-id-5">
@@ -169,15 +169,21 @@
                         <div class="form-group col-lg-4">
                             <label for="rateVat">نسبة ضريبة الفيمة المضافة <span class="tx-danger">*</span></label>
                             <select class="form-control SlectBox" name="rate_vat" id="rate_VAT" onchange="myFunction()"
-                                style="width: 100%;color: #4d5875; @error('rate_vat') border-color: red @enderror"
-                                placeholder="حدد نسبة الخصم">
+                                style="width: 100%;color: #4d5875; @error('rate_vat') border-color: red @enderror">
                                 <option label="حدد نسبة الخصم" value="0">
                                     حدد نسبة الخصم
                                 </option>
-                                <option value="5" {{ old('rate_vat') == '5' ? 'selected' : '' }}>5%</option>
-                                <option value="10" {{ old('rate_vat') == '10' ? 'selected' : '' }}>10%</option>
-                            </select>
-                            @error('rate_vat')
+                                <option {{ old('rate_vat') == null ?
+                                    ($invoice->rate_vat == '5' ? 'selected' : '') :
+                                    (old('rate_vat') == '5' ? 'selected' : '') }} value="5">
+                                    5%
+                                </option>
+                                <option {{ old('rate_vat') == null ?
+                                    ($invoice->rate_vat == '10' ? 'selected' : '') :
+                                    (old('rate_vat') == '10' ? 'selected' : '') }} value="10">
+                                    10%
+                                </option>
+                            </select> @error('rate_vat')
                             <ul class="parsley-errors-list filled" id="parsley-id-5">
                                 <li class="parsley-required">{{ $message }}</li>
                             </ul>
@@ -188,19 +194,21 @@
                         <div class="form-group col-lg-6">
                             <label for="invoiceValueVat">قيمة ضريبة القيمة المضافة</label>
                             <input type="text" name="value_vat" class="form-control" id="value_VAT"
-                                value="{{ old('value_vat') }}" readonly>
+                                value="{{ old('value_vat') == null ? $invoice->value_vat : old('value_vat') }}"
+                                readonly>
                         </div>
                         <div class="form-group col-lg-6">
                             <label for="invoiceTotal">الإجمالي شامل الضريبة</label>
-                            <input type="text" name="total" class="form-control " id="total" value="{{ old('total') }}"
-                                readonly>
+                            <input type="text" name="total" class="form-control " id="total"
+                                value="{{ old('total') == null ? $invoice->total : old('total') }}" readonly>
                         </div>
                     </div>
                     <div class="row row-sm">
                         <div class="form-group col-lg-12">
                             <label for="invoiceValueVat">الملاحظات</label>
                             <textarea class="form-control @error('note') parsley-error @enderror" name="note"
-                                placeholder="ملاحظات" rows="3"></textarea>
+                                placeholder="ملاحظات"
+                                rows="3">{{ old('note') == null ? $invoice->note : old('note') }}</textarea>
                             @error('note')
                             <ul class="parsley-errors-list filled" id="parsley-id-5">
                                 <li class="parsley-required">{{ $message }}</li>
@@ -208,19 +216,20 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="row row-sm">
+                    {{-- <div class="row row-sm">
                         <div class="form-group col-lg-12">
                             <label for="invoiceValueVat">المرفقات <span class="tx-danger">* الصيغ المدعومة هي: pdf,
                                     jpeg, jpg, png</span></label>
-                            <input type="file" class="dropify" data-height="200" name="attachments[]" multiple />
+                            <input type="file" class="dropify" data-height="200" name="attachment"
+                                data-default-file="{{ asset($invoice->getAttachment()) }}" />
                             @error('attachment')
                             <ul class="parsley-errors-list filled" id="parsley-id-5">
                                 <li class="parsley-required">{{ $message }}</li>
                             </ul>
                             @enderror
                         </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary mt-3 mb-0">إنشاء</button>
+                    </div> --}}
+                    <button type="submit" class="btn btn-primary mt-3 mb-0">تعديل</button>
                 </form>
             </div>
         </div>
@@ -267,31 +276,54 @@
 <!-- Internal Form-validation js -->
 <script src="{{URL::asset('assets/js/form-validation.js')}}"></script>
 <script>
-</script>
-<script>
-    const oldInvoiceDate = "{{ old('invoice_date') }}";
-    let date = new Date();
-    let selectedDate = (date.getMonth()+1) + '/' + date.getDate() +'/' +date.getFullYear();
-    if(selectedDate == oldInvoiceDate || oldInvoiceDate == '')
-        $("#invoiceDate").datepicker().datepicker("setDate", new Date());   
-    else
-        $("#invoiceDate").datepicker().datepicker("setDate", oldInvoiceDate);
-</script>
-<script>
-    $(document).ready(function() {
-            $('select[id="sectionId"]').on('change', function() {
+    // this script check if there is any old or selected product if there select it using jQuery select package called sumo
+        window.onload = function () {
+            const sectionId = document.getElementById('sectionId').value;
+            const oldProductId = "{{ old('product_id') }}";
+            const productId = "{{ $invoice->product_id }}";
+            if (sectionId != null) {
+                $.ajax({
+                    url: "{{ URL::to('section') }}/" + sectionId,
+                    type: "GET",
+                    dataType: "json",
+                    success: function (data) {
+                        const length = $('select[name="product_id"] option').length;
+                        const productSelect = $('select[name="product_id"]')[0];
+                        let selectedId = 0;
+                        let index = 1;
+                        // clear old options
+                        for (var i = length; i >= 1; i--)
+                            $('select[name="product_id"]')[0].sumo.remove(i - 1);
+                        $('select[name="product_id"]')[0].sumo.add('0', 'إختر المنتج');
+
+                        $.each(data, function (key, value) {
+                            $('select[name="product_id"]')[0].sumo.add(key, value);
+                            if (oldProductId == '' && productId == key) {
+                                $('select[name="product_id"]')[0].sumo.selectItem(index);
+                            } else if (key == oldProductId) {
+                                $('select[name="product_id"]')[0].sumo.selectItem(index);
+                            }
+                            index++;
+                        });
+                    },
+                });
+            }
+        };
+        // ajax request to get product for section
+        $(document).ready(function () {
+            $('select[id="sectionId"]').on('change', function () {
                 var sectionId = $(this).val();
                 if (sectionId) {
                     $.ajax({
                         url: "{{ URL::to('section') }}/" + sectionId,
                         type: "GET",
                         dataType: "json",
-                        success: function(data) {
+                        success: function (data) {
                             const length = $('select[name="product_id"] option').length;
                             // clear old options
-                            for(var i=length; i>=1; i--)
-                                $('select[name="product_id"]')[0].sumo.remove(i-1);
-                            $.each(data, function(key, value) {
+                            for (var i = length; i >= 1; i--)
+                                $('select[name="product_id"]')[0].sumo.remove(i - 1);
+                            $.each(data, function (key, value) {
                                 $('select[name="product_id"]')[0].sumo.add(key, value);
                             });
                         },
@@ -300,38 +332,11 @@
                     console.log('AJAX load did not work');
                 }
             });
-    });
-    window.onload = function () {   
-        const oldSectionId = "{{ old('section_id') }}";
-        console.log('old section id:' + oldSectionId);
-        const oldProductId = "{{ old('product_id') }}";
-        console.log('old prodcut id:' + oldProductId);
-        if(oldSectionId != null){
-            $.ajax({
-                url: "{{ URL::to('section') }}/" + oldSectionId,
-                type: "GET",
-                dataType: "json",
-                success: function(data) {
-                    const length = $('select[name="product_id"] option').length;
-                    let index = 1;
-                    // clear old options
-                    for(var i=length; i>=1; i--)
-                        $('select[name="product_id"]')[0].sumo.remove(i-1);
-                    $('select[name="product_id"]')[0].sumo.add('0', 'إختر المنتج');
-                    $.each(data, function(key, value) {
-                        $('select[name="product_id"]')[0].sumo.add(key, value);
-                        if(key == oldProductId)
-                            $('select[name="product_id"]')[0].sumo.selectItem(index);
-                        index++;
-                    });
-                },
-            });
-        }
-    };
+        });
 </script>
-
 <script>
-    function myFunction() {
+    // calculate
+        function myFunction() {
             var Amount_Commission = parseFloat(document.getElementById("commission_amount").value);
             var Discount = parseFloat(document.getElementById("discount").value);
             var Rate_VAT = parseFloat(document.getElementById("rate_VAT").value);
