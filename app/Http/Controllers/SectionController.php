@@ -9,6 +9,14 @@ use Illuminate\Http\Request;
 class SectionController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('permission:sections_index', ['only' => ['index']]);
+        $this->middleware('permission:create_section', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit_section', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete_section', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *

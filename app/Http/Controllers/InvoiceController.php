@@ -22,6 +22,27 @@ use App\Exports\InvoicesExport;
 
 class InvoiceController extends Controller
 {
+
+    private $is_archive = false;
+
+    public function __construct()
+    {
+        $this->middleware('permission:invoices_index', ['only' => ['index']]);
+        $this->middleware('permission:invoices_archives', ['only' => ['archives']]);
+        $this->middleware('permission:paid_invoices', ['only' => ['paidInvoices']]);
+        $this->middleware('permission:part_paid_invoices', ['only' => ['partPaidInvoices']]);
+        $this->middleware('permission:unpaid_invoices', ['only' => ['unpaidInvoices']]);
+        $this->middleware('permission:archive_invoice', ['only' => ['archive']]);
+        $this->middleware('permission:unarchive_invoice', ['only' => ['unarchive']]);
+        $this->middleware('permission:create_invoice', ['only' => ['create', 'store']]);
+        $this->middleware('permission:edit_invoice', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:delete_invoice', ['only' => ['destroy']]);
+        $this->middleware('permission:edit_invoice_payment_status', ['only' => ['editStatus']]);
+        $this->middleware('permission:export_invoices_excel', ['only' => ['export']]);
+        $this->middleware('permission:print_invoice', ['only' => ['print']]);
+        $this->middleware('permission:edit_invoice_status', ['only' => ['editStatus', 'updateStatus']]);
+    }
+
     /**
      * Display a listing of the invoices.
      *
@@ -31,7 +52,7 @@ class InvoiceController extends Controller
     {
         try {
             $invoices = Invoice::all();
-            $is_archive = false;
+            $is_archive = $this->is_archive;
             return view('invoices.index', compact(['invoices', 'is_archive']));
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'حصلت مشكلة في جلب بيانات الفواتير.');
@@ -48,6 +69,28 @@ class InvoiceController extends Controller
         try {
             $invoices = Invoice::onlyTrashed()->get();
             $is_archive = true;
+            return view('invoices.index', compact(['invoices', 'is_archive']));
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'حصلت مشكلة في جلب بيانات الفواتير المأرشفة.');
+        }
+    }
+
+    public function getInvoicesByPaymentStatus($payment_status)
+    {
+        switch ($payment_status) {
+            case 'paid-invoices':
+                $status = 1;
+                break;
+            case 'part-paid-invoices':
+                $status = 2;
+                break;
+            case 'unpaid-invoices':
+                $status = 0;
+                break;
+        }
+        try {
+            $invoices = Invoice::where('status', $status)->get();
+            $is_archive = false;
             return view('invoices.index', compact(['invoices', 'is_archive']));
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'حصلت مشكلة في جلب بيانات الفواتير المأرشفة.');
@@ -199,7 +242,7 @@ class InvoiceController extends Controller
     {
         try {
             // check if invoice number is update
-            if ($request->has('invoice_number'))
+            if ($request->invoice_number != $invoice->invoice_number)
                 // rename invoice attachment folder 
                 Storage::disk('invoices')->move($invoice->invoice_number, $request->invoice_number);
             $invoice->update($request->validated());

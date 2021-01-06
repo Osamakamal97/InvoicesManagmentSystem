@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Storage;
 
 class InvoiceAttachmentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:add_invoice_attachment', ['only' => ['store']]);
+        $this->middleware('permission:view_invoice_attachment', ['only' => ['getAttachment']]);
+        $this->middleware('permission:download_invoice_attachment', ['only' => ['downloadAttachment']]);
+        $this->middleware('permission:delete_invoice_attachment', ['only' => ['destroy']]);
+    }
+
     /**
      * Display a listing of the resource.
      *

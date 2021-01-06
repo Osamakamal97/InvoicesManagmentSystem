@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title','الفواتير')
+@section('title','المستخدمين')
 @section('css')
 <!-- Internal Data table css -->
 <link href="{{URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" />
@@ -22,14 +22,18 @@
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/telephoneinput/telephoneinput-rtl.css')}}">
 <!--Internal Sumoselect css-->
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect-rtl.css')}}">
+<!---Internal  Prism css-->
+<link href="{{URL::asset('assets/plugins/prism/prism.css')}}" rel="stylesheet">
+<!--- Custom-scroll -->
+<link href="{{URL::asset('assets/plugins/custom-scroll/jquery.mCustomScrollbar.css')}}" rel="stylesheet">
 @endsection
 @section('page-header')
 <!-- breadcrumb -->
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto">
         <div class="d-flex">
-            <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                قائمة الفواتير</span>
+            <h4 class="content-title mb-0 my-auto">المستخدمين</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                قائمة المستخدمين</span>
         </div>
     </div>
 </div>
@@ -43,79 +47,70 @@
         <div class="card">
             <div class="card-header pb-0">
                 <div class="d-flex justify-content-between">
-                    <h4 class="card-title mg-b-0">الفواتير</h4>
+                    <h4 class="card-title mg-b-0">المستخدمين</h4>
                     <i class="mdi mdi-dots-horizontal text-gray"></i>
                 </div>
-                @can('create_invoice')
-                <div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
-                    <a class="btn btn-outline-primary btn-block" href="{{ route('invoices.create') }}">إنشاء فاتورة
-                        جديد</a>
+                <div class="row">
+                    @can('create_user')
+                    <div class="col-sm-6 col-md-6 col-xl-3 mg-t-20">
+                        <a class="btn btn-outline-primary btn-block" href="{{ route('users.create') }}">إنشاء مستخدم
+                            جديد</a>
+                    </div>
+                    @endcan
                 </div>
-                @endcan
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table text-md-nowrap" id="example2">
                         <thead>
                             <tr>
-                                <th class="wd-5p border-bottom-0">#</th>
-                                <th class="wd-10p border-bottom-0">رقم الفاتورة</th>
-                                <th class="wd-10p border-bottom-0">تاريخ الفاتورة</th>
-                                <th class="wd-10p border-bottom-0">تاريخ الاستحقاق</th>
-                                <th class="wd-5p border-bottom-0">المنتج</th>
-                                <th class="wd-5p border-bottom-0">القسم</th>
-                                <th class="wd-10p border-bottom-0">الرصيد الكلي</th>
-                                <th class="wd-10p border-bottom-0">الحالة</th>
+                                <th class="border-bottom-0">#</th>
+                                <th class="border-bottom-0">الاسم</th>
+                                <th class="border-bottom-0">البريد الإلكتروني</th>
+                                <th class="border-bottom-0">الدور</th>
+                                <th class="border-bottom-0">الحالة</th>
                                 <th class="wd-10p border-bottom-0">العمليات</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($invoices as $invoice)
+                            @foreach ($users as $user)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $invoice->invoice_number }}</td>
-                                <td>{{ $invoice->invoice_date }}</td>
-                                <td>{{ $invoice->due_date }}</td>
-                                <td>{{ $invoice->product->name }}</td>
-                                <td><a href="{{ route('invoiceDetails.index',$invoice->id) }}" style="color: black">
-                                        {{ $invoice->section->name }}</a>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->email }}</td>
+                                <td>
+                                    @if(!empty($user->getRoleNames()))
+                                    @foreach ($user->getRoleNames() as $role)
+                                    {{ $role }}
+                                    @endforeach
+                                    @endif
                                 </td>
-                                <td>${{ $invoice->total }}</td>
                                 <td class="text-center">
-                                    @if ($invoice->status == 0)
+                                    @if ($user->status == 0)
                                     <span class="label text-danger d-flex">
-                                        <div class="dot-label bg-danger ml-1"></div>{{ $invoice->getStatus() }}
-                                    </span>
-                                    @elseif($invoice->status == 1)
-                                    <span class="label text-success d-flex">
-                                        <div class="dot-label bg-success ml-1"></div>{{ $invoice->getStatus() }}
-                                    </span>
-                                    @elseif($invoice->status == 2)
-                                    <span class="label text-warning d-flex">
-                                        <div class="dot-label bg-warning ml-1"></div>{{ $invoice->getStatus() }}
+                                        <div class="dot-label bg-danger ml-1"></div>{{ $user->getStatus() }}
                                     </span>
                                     @else
-                                    <span class="label text-muted d-flex">
-                                        <div class="dot-label bg-gray-300 ml-1"></div>{{ $invoice->getStatus() }}
+                                    <span class="label text-success d-flex">
+                                        <div class="dot-label bg-success ml-1"></div>{{ $user->getStatus() }}
                                     </span>
                                     @endif
                                 </td>
-                                <td class="btn-icon-list">
-                                    @can('edit_invoice_status')
-                                    <a href="{{ route('invoices.editStatus' ,$invoice->id) }}"
-                                        class="btn btn-info btn-sm btn-icon">
-                                        <i class="las la-file-invoice-dollar"></i></a>
-                                    @endcan
-                                    @can('edit_invoice')
-                                    <a href="{{ route('invoices.edit' ,$invoice->id) }}"
+                                <td class="btn-icon-list " style="float: left">
+                                    @can('edit_user')
+                                    <a href="{{ route('users.edit' ,$user->id) }}" data-toggle="tooltip"
+                                        data-placement="top" title="تعديل المستخدم"
                                         class="btn btn-warning btn-sm btn-icon">
                                         <i class="typcn typcn-edit"></i></a>
                                     @endcan
-                                    @can('delete_invoice')
-                                    <a href="#deleteModal" class="btn btn-danger btn-sm btn-icon"
-                                        data-effect="effect-flip-horizontal" data-toggle="modal"
-                                        data-id="{{ $invoice->id }}" data-name="{{ $invoice->name }}">
-                                        <i class="typcn typcn-delete-outline"></i></a>
+                                    @can('delete_user')
+                                    <span data-toggle="tooltip" data-placement="top" title="حذف المستخدم نهائياً"
+                                        style="margin-right: 5px;">
+                                        <a href="#deleteModal" class="btn btn-danger btn-sm btn-icon"
+                                            data-effect="effect-flip-horizontal" data-toggle="modal"
+                                            data-id="{{ $user->id }}" data-name="{{ $user->name }}">
+                                            <i class="typcn typcn-delete-outline"></i></a>
+                                    </span>
                                     @endcan
                                 </td>
                             </tr>
@@ -128,21 +123,21 @@
     </div>
     <!--/div-->
     <!-- Modal effects -->
-    @can('delete_invoice')
+    @can('create_user')
     <div class="modal" id="deleteModal">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-content-demo">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        حذف الفاتورة
+                        حذف المستخدم
                     </h6>
                     <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
                             aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mg-b-20 mg-x-20"> هل أنت متأكد من حذف الفاتورة <span id="invoice_name"
+                    <p class="mg-b-20 mg-x-20"> هل أنت متأكد من حذف المستخدم صاحبة الرقم <span id="user_number_delete"
                             style="font-weight: bold"></span> ؟</p>
-                    <form class="form-horizontal" action="{{ route('invoices.destroy', 0) }}" id="submit-delete-data"
+                    <form class="form-horizontal" action="{{ route('users.destroy', 0) }}" id="submit-delete-data"
                         method="POST">
                         @csrf
                         @method('DELETE')
@@ -210,14 +205,19 @@
 <script src="{{URL::asset('assets/js/form-elements.js')}}"></script>
 <!--Internal Sumoselect js-->
 <script src="{{URL::asset('assets/plugins/sumoselect/jquery.sumoselect.js')}}"></script>
+<!--Internal  Clipboard js-->
+<script src="{{URL::asset('assets/plugins/clipboard/clipboard.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/clipboard/clipboard.js')}}"></script>
+<!-- Internal Prism js-->
+<script src="{{URL::asset('assets/plugins/prism/prism.js')}}"></script>
 <script>
     $('#deleteModal').on('show.bs.modal', function(event){
         var button = $(event.relatedTarget);
         var id = button.data('id');
         var name = button.data('name');
         var modal = $(this);
-        document.getElementById('submit-delete-data').action = "{{ route('invoices.destroy','') }}/"+id;
-        document.getElementById('invoice_name').textContent = name;
+        document.getElementById('submit-delete-data').action = "{{ route('users.destroy','') }}/"+id;
+        document.getElementById('user_number_delete').textContent = name;
     });
 </script>
 @endsection

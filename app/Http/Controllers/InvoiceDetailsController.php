@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class InvoiceDetailsController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware('permission:invoice_details', ['only' => ['index']]);
+    }
+
     /**
      * Display a listing of the resource.
      *

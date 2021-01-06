@@ -37,6 +37,7 @@
 					</svg><span class="side-menu__label">الرئيسة</span><span
 						class="badge badge-success side-badge">1</span></a>
 			</li>
+			@can('invoices')
 			<li class="side-item side-item-category">الفواتير</li>
 			<li class="slide">
 				<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}"><svg
@@ -47,15 +48,30 @@
 							d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm2 0h14v14H5V5zm2 5h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z" />
 					</svg><span class="side-menu__label">الفواتير</span><i class="angle fe fe-chevron-down"></i></a>
 				<ul class="slide-menu">
+					@can('invoices_index')
 					<li><a class="slide-item" href="{{ url('/' . $page='invoices') }}">قائمة الفواتير</a></li>
+					@endcan
+					@can('invoices_archives')
 					<li><a class="slide-item" href="{{ route('invoices.archives') }}">الفواتير المُأَرشفة</a></li>
-					<li><a class="slide-item" href="{{ url('/' . $page='chart-flot') }}">الفواتير المدفوعة</a></li>
-					<li><a class="slide-item" href="{{ url('/' . $page='chart-chartjs') }}">الفواتير الغير مدفوعة</a>
+					@endcan
+					@can('paid_invoices')
+					<li><a class="slide-item" href="{{ url('/' . $page='invoices/paid-invoices') }}">الفواتير
+							المدفوعة</a></li>
+					@endcan
+					@can('part_paid_invoices')
+					<li><a class="slide-item" href="{{ url('/' . $page='invoices/part-paid-invoices') }}">الفواتير
+							المدفوعة جزئية</a>
 					</li>
-					<li><a class="slide-item" href="{{ url('/' . $page='chart-echart') }}">الفواتير المدفوعة جزئية</a>
+					@endcan
+					@can('unpaid_invoices')
+					<li><a class="slide-item" href="{{ url('/' . $page='invoices/unpaid-invoices') }}">الفواتير الغير
+							مدفوعة</a>
 					</li>
+					@endcan
 				</ul>
 			</li>
+			@endcan
+			@can('reports')
 			<li class="side-item side-item-category">التقارير</li>
 			<li class="slide">
 				<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}">
@@ -68,10 +84,16 @@
 					</svg>
 					<span class="side-menu__label">التقارير</span><i class="angle fe fe-chevron-down"></i></a>
 				<ul class="slide-menu">
+					@can('invoices_reports')
 					<li><a class="slide-item" href="{{ url('/' . $page='cards') }}">تقارير الفواتير</a></li>
+					@endcan
+					@can('customers_reports')
 					<li><a class="slide-item" href="{{ url('/' . $page='darggablecards') }}">تقارير العملاء</a></li>
+					@endcan
 				</ul>
 			</li>
+			@endcan
+			@can('users')
 			<li class="side-item side-item-category">المستخدمين</li>
 			<li class="slide">
 				<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}">
@@ -85,10 +107,16 @@
 					</svg>
 					<span class="side-menu__label">المستخدمين</span><i class="angle fe fe-chevron-down"></i></a>
 				<ul class="slide-menu">
-					<li><a class="slide-item" href="{{ url('/' . $page='mail') }}">المستخدمين</a></li>
-					<li><a class="slide-item" href="{{ url('/' . $page='mail-compose') }}">صلاحيات المستخدمين</a></li>
+					@can('users_index')
+					<li><a class="slide-item" href="{{ url('/' . $page='users') }}">المستخدمين</a></li>
+					@endcan
+					@can('roles_index')
+					<li><a class="slide-item" href="{{ url('/' . $page='roles') }}">صلاحيات المستخدمين</a></li>
+					@endcan
 				</ul>
 			</li>
+			@endcan
+			@can('settings')
 			<li class="side-item side-item-category">الإعدادات</li>
 			<li class="slide">
 				<a class="side-menu__item" data-toggle="slide" href="{{ url('/' . $page='#') }}">
@@ -102,10 +130,15 @@
 					</svg>
 					<span class="side-menu__label">الإعدادات</span><i class="angle fe fe-chevron-down"></i></a>
 				<ul class="slide-menu">
+					@can('sections_index')
 					<li><a class="slide-item" href="{{ url('/' . $page='sections') }}">الأقسام</a></li>
+					@endcan
+					@can('products_index')
 					<li><a class="slide-item" href="{{ url('/' . $page='products') }}">المنتجات</a></li>
+					@endcan
 				</ul>
 			</li>
+			@endcan
 		</ul>
 	</div>
 </aside>

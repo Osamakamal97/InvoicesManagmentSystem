@@ -46,10 +46,12 @@
                     <h4 class="card-title mg-b-0">المنتجات</h4>
                     <i class="mdi mdi-dots-horizontal text-gray"></i>
                 </div>
+                @can('create_product')
                 <div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
                     <a class="modal-effect btn btn-outline-primary btn-block" data-effect="effect-flip-horizontal"
                         data-toggle="modal" href="#create_modal">إنشاء منتج جديد</a>
                 </div>
+                @endcan
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -74,24 +76,28 @@
                                 <td class="text-center">
                                     @if ($product->status == 0)
                                     <span class="label text-danger d-flex">
-										<div class="dot-label bg-danger ml-1"></div>{{ $product->getStatus() }}
-									</span>
+                                        <div class="dot-label bg-danger ml-1"></div>{{ $product->getStatus() }}
+                                    </span>
                                     @else
                                     <span class="label text-success d-flex">
-										<div class="dot-label bg-success ml-1"></div>{{ $product->getStatus() }}
-									</span>  
+                                        <div class="dot-label bg-success ml-1"></div>{{ $product->getStatus() }}
+                                    </span>
                                     @endif
-								</td>
+                                </td>
                                 <td class="btn-icon-list">
+                                    @can('edit_product')
                                     <a href="#editModal" class="btn btn-warning btn-sm btn-icon"
                                         data-effect="effect-flip-horizontal" data-toggle="modal"
                                         data-id="{{ $product->id }}" data-name="{{ $product->name }}"
                                         data-description="{{ $product->description }}">
                                         <i class="typcn typcn-edit"></i></a>
+                                    @endcan
+                                    @can('delete_product')
                                     <a href="#deleteModal" class="btn btn-danger btn-sm btn-icon"
                                         data-effect="effect-flip-horizontal" data-toggle="modal"
                                         data-id="{{ $product->id }}" data-name="{{ $product->name }}">
                                         <i class="typcn typcn-delete-outline"></i></a>
+                                    @endcan
                                 </td>
                             </tr>
                             @endforeach
@@ -103,6 +109,7 @@
     </div>
     <!--/div-->
     <!-- Modal effects -->
+    @can('create_product')
     <div class="modal" id="create_modal">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-content-demo">
@@ -149,6 +156,8 @@
             </div>
         </div>
     </div>
+    @endcan
+    @can('edit_product')
     <div class="modal" id="editModal">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-content-demo">
@@ -195,6 +204,8 @@
             </div>
         </div>
     </div>
+    @endcan
+    @can('delete_product')
     <div class="modal" id="deleteModal">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-content-demo">
@@ -222,6 +233,7 @@
             </div>
         </div>
     </div>
+    @endcan
     <!-- End Modal effects-->
 </div>
 <!-- row closed -->

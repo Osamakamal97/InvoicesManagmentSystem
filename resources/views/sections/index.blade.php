@@ -37,8 +37,10 @@
                     <i class="mdi mdi-dots-horizontal text-gray"></i>
                 </div>
                 <div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
+                    @can('create_section')
                     <a class="modal-effect btn btn-outline-primary btn-block" data-effect="effect-flip-horizontal"
                         data-toggle="modal" href="#create_modal">إنشاء قسم جديد</a>
+                    @endcan
                 </div>
             </div>
             <div class="card-body">
@@ -64,25 +66,29 @@
                                 <td class="text-center">
                                     @if ($section->status == 0)
                                     <span class="label text-danger d-flex">
-										<div class="dot-label bg-danger ml-1"></div>{{ $section->getStatus() }}
-									</span>
+                                        <div class="dot-label bg-danger ml-1"></div>{{ $section->getStatus() }}
+                                    </span>
                                     @else
                                     <span class="label text-success d-flex">
-										<div class="dot-label bg-success ml-1"></div>{{ $section->getStatus() }}
-									</span>  
+                                        <div class="dot-label bg-success ml-1"></div>{{ $section->getStatus() }}
+                                    </span>
                                     @endif
-									
-								</td>
+
+                                </td>
                                 <td class="btn-icon-list">
+                                    @can('edit_section')
                                     <a href="#editModal" class="btn btn-warning btn-sm btn-icon"
                                         data-effect="effect-flip-horizontal" data-toggle="modal"
                                         data-id="{{ $section->id }}" data-name="{{ $section->name }}"
                                         data-description="{{ $section->description }}">
                                         <i class="typcn typcn-edit"></i></a>
+                                    @endcan
+                                    @can('delete_section')
                                     <a href="#deleteModal" class="btn btn-danger btn-sm btn-icon"
                                         data-effect="effect-flip-horizontal" data-toggle="modal"
                                         data-id="{{ $section->id }}" data-name="{{ $section->name }}">
                                         <i class="typcn typcn-delete-outline"></i></a>
+                                    @endcan
                                 </td>
                             </tr>
                             @endforeach
@@ -94,6 +100,7 @@
     </div>
     <!--/div-->
     <!-- Modal effects -->
+    @can('create_section')
     <div class="modal" id="create_modal">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-content-demo">
@@ -126,6 +133,8 @@
             </div>
         </div>
     </div>
+    @endcan
+    @can('edit_section')
     <div class="modal" id="editModal">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-content-demo">
@@ -158,6 +167,8 @@
             </div>
         </div>
     </div>
+    @endcan
+    @can('delete_section')
     <div class="modal" id="deleteModal">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-content-demo">
@@ -185,6 +196,7 @@
             </div>
         </div>
     </div>
+    @endcan
     <!-- End Modal effects-->
 </div>
 <!-- row closed -->

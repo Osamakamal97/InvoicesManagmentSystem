@@ -34,7 +34,7 @@
      function getNotification(){
         console.log('hello');
         notif({
-            type: "success",
+            type: "error",
             msg: "{{ session()->get('error') }}",
             position: "right",
             bottom:'10'

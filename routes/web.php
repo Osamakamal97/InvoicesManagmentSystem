@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceAttachmentController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoiceDetailsController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -13,7 +16,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::view('test', 'test');
+// Route::view('test', 'test');
+Route::get('test', [HomeController::class, 'test']);
 Route::view('app', 'layouts.app');
 
 Auth::routes();
@@ -29,11 +33,14 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('invoices/{invoice}/updateStatus', [InvoiceController::class, 'updateStatus'])->name('invoices.updateStatus');
     Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
     Route::get('invoices/export', [InvoiceController::class, 'export'])->name('invoices.export');
+    Route::get('invoices/{payment_status}', [InvoiceController::class, 'getInvoicesByPaymentStatus'])->name('invoices.paid_invoices');
     // Resources
     Route::resources([
         'invoices' => InvoiceController::class,
         'sections' => SectionController::class,
         'products' => ProductController::class,
+        'users' => UserController::class,
+        'roles' => RoleController::class
     ]);
     // Invoice Details Routes
     Route::get('invoice/{invoice_id}/details', [InvoiceDetailsController::class, 'index'])->name('invoiceDetails.index');

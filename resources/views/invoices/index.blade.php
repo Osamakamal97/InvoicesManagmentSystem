@@ -51,14 +51,19 @@
                     <i class="mdi mdi-dots-horizontal text-gray"></i>
                 </div>
                 <div class="row">
+                    @can('create_invoice')
                     <div class="col-sm-6 col-md-4 col-xl-2 mg-t-20">
                         <a class="btn btn-outline-primary btn-block" href="{{ route('invoices.create') }}">إنشاء فاتورة
                             جديد</a>
                     </div>
+                    @endcan
+                    @can('export_invoice')
                     <div class="col-sm-6 col-md-4 col-xl-2 mg-t-20">
-                        <a class="btn btn-outline-primary btn-block" href="{{ route('invoices.export') }}" target="_blank">
+                        <a class="btn btn-outline-primary btn-block" href="{{ route('invoices.export') }}"
+                            target="_blank">
                             تصدير البيانات</a>
                     </div>
+                    @endcan
                 </div>
             </div>
             <div class="card-body">
@@ -122,6 +127,8 @@
                                 </td>
                                 <td class="btn-icon-list ">
                                     @if ($is_archive)
+                                    @can('unarchive_invoice')
+
                                     <span data-toggle="tooltip" data-placement="top" title="إلغاء أرشفة الفاتورة"
                                         style="margin-left: 5px;margin-right: 5px">
                                         <a href="#unarchiveModal" class="btn btn-info btn-sm btn-icon"
@@ -129,21 +136,29 @@
                                             data-id="{{ $invoice->id }}" data-name="{{ $invoice->invoice_number }}">
                                             <i class="las la-inbox"></i></a>
                                     </span>
+                                    @endcan
+                                    @can('delete_invoice')
                                     <span data-toggle="tooltip" data-placement="top" title="حذف الفاتورة نهائياً">
                                         <a href="#deleteModal" class="btn btn-danger btn-sm btn-icon"
                                             data-effect="effect-flip-horizontal" data-toggle="modal"
                                             data-id="{{ $invoice->id }}" data-name="{{ $invoice->invoice_number }}">
                                             <i class="typcn typcn-delete-outline"></i></a>
                                     </span>
+                                    @endcan
                                     @else
+                                    @can('edit_invoice_payment_status')
                                     <a href="{{ route('invoices.editStatus' ,$invoice->id) }}"
                                         class="btn btn-primary btn-sm btn-icon" title="تعديل حالة الدفع"
                                         data-toggle="tooltip" data-placement="top">
                                         <i class="las la-file-invoice-dollar"></i></a>
+                                    @endcan
+                                    @can('edit_invoice')
                                     <a href="{{ route('invoices.edit' ,$invoice->id) }}" data-toggle="tooltip"
                                         data-placement="top" title="تعديل الفاتورة"
                                         class="btn btn-warning btn-sm btn-icon">
                                         <i class="typcn typcn-edit"></i></a>
+                                    @endcan
+                                    @can('archive_invoice')
                                     <span data-toggle="tooltip" data-placement="top" title="أرشفة الفاتورة"
                                         style="margin-left: 5px;margin-right: 5px">
                                         <a href="#archiveModal" class="btn btn-info btn-sm btn-icon"
@@ -151,11 +166,14 @@
                                             data-id="{{ $invoice->id }}" data-name="{{ $invoice->invoice_number }}">
                                             <i class="las la-archive"></i></a>
                                     </span>
+                                    @endcan
+                                    @can('print_invoice')
                                     <a href="{{ route('invoices.print',$invoice->id) }}"
                                         class="btn btn-light btn-sm btn-icon" data-effect="effect-flip-horizontal"
-                                        data-toggle="tooltip" data-placement="top" title="طباعة فاتورة"
+                                        data-toggle="tooltip" data-placement="top" title="طباعة الفاتورة"
                                         style="margin-left: 5px;margin-right: 5px" data-id="{{ $invoice->id }}">
                                         <i class="las la-print"></i></a>
+                                    @endcan
                                     @endif
                                 </td>
                             </tr>
