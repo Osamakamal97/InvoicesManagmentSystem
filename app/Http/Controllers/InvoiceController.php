@@ -182,7 +182,7 @@ class InvoiceController extends Controller
                     ]);
             }
             // Send mail
-            Notification::send(auth()->user(), new InvoiceAdded($invoice_id));
+            // Notification::send(auth()->user(), new InvoiceAdded($invoice_id));
             // Commit DB insertions
             DB::commit();
             return redirect()->route('invoices.index')->with('success', 'تم إنشاء الفاتورة بنجاح.');

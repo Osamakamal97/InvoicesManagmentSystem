@@ -85,10 +85,10 @@
 					<span class="side-menu__label">التقارير</span><i class="angle fe fe-chevron-down"></i></a>
 				<ul class="slide-menu">
 					@can('invoices_reports')
-					<li><a class="slide-item" href="{{ url('/' . $page='cards') }}">تقارير الفواتير</a></li>
+					<li><a class="slide-item" href="{{ url('/' . $page='invoices-reports') }}">تقارير الفواتير</a></li>
 					@endcan
 					@can('customers_reports')
-					<li><a class="slide-item" href="{{ url('/' . $page='darggablecards') }}">تقارير العملاء</a></li>
+					<li><a class="slide-item" href="{{ url('/' . $page='customers-reports') }}">تقارير العملاء</a></li>
 					@endcan
 				</ul>
 			</li>

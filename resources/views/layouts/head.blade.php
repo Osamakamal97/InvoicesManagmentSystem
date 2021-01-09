@@ -19,3 +19,4 @@
 <link href="{{URL::asset('assets/css-rtl/skin-modes.css')}}" rel="stylesheet">
 <!--Internal   Notify -->
 <link href="{{URL::asset('assets/plugins/notify/css/notifIt.css')}}" rel="stylesheet" />
+@livewireStyles
