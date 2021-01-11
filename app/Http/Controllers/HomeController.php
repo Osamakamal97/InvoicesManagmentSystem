@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Charts\SampleChart;
+use App\Models\Invoice;
+use Chartisan\PHP\Chartisan;
+use ConsoleTVs\Charts\ChartsController;
 use Illuminate\Http\Request;
 use mysqli;
+use PhpOffice\PhpSpreadsheet\Helper\Sample;
 
 class HomeController extends Controller
 {
@@ -24,61 +29,81 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $paid_invoices_count = invoiceCountByStatus(1);
+        $part_paid_invoices_count = invoiceCountByStatus(2);
+        $unpaid_invoices_count = invoiceCountByStatus(0);
+
+        $chartjs = app()->chartjs
+            ->name('barChartTest')
+            ->type('bar')
+            ->size(['width' => 350, 'height' => 200])
+            ->labels(['الفواتير المدفوعة', 'الفواتير المدفوعة جزئياً', 'الفواتير الغير مدفوعة'])
+            ->datasets([
+                [
+                    "label" => "الفواتير المدفوعة",
+                    'backgroundColor' => ['green'],
+                    'data' => [$paid_invoices_count]
+                ],
+                [
+                    "label" => "الفواتير المدفوعة جزئياً",
+                    'backgroundColor' => ['orange'],
+                    'data' => [$part_paid_invoices_count]
+                ],
+                [
+                    "label" => "الفواتير الغير مدفوعة",
+                    'backgroundColor' => ['red'],
+                    'data' => [$unpaid_invoices_count]
+                ],
+            ])
+            ->options([]);
+
+        $pieChartjs = app()->chartjs
+            ->name('pieChartTest')
+            ->type('pie')
+            ->size(['width' => 400, 'height' => 200])
+            ->labels(['الفواتير المدفوعة', 'الفواتير المدفوعة جزئياً', 'الفواتير الغير مدفوعة'])
+            ->datasets([
+                [
+                    'backgroundColor' => ['green', 'orange','red'],
+                    'data' => [$paid_invoices_count,$part_paid_invoices_count,$unpaid_invoices_count]
+                ]
+            ])
+            ->options([]);
+
+        
+
+        return view('home', compact(['chartjs', 'pieChartjs']));
     }
 
     public function test()
     {
-        $mysqli = new mysqli("localhost", "osama", "password", "test");
-        $mysqli->query("CREATE TABLE word_data");
-        $result = $mysqli->query("SELECT * FROM products");
-        dd($result->num_rows);
-        $line = '';
-        if ($result = $mysqli->query("SELECT * FROM products")) {
-            while ($obj = $result->fetch_object()) {
-                $line .= $obj->name . ' ';
-                $line .= $obj->id . ' ';
-            }
-        }
-
-        // dd($results);
-        // foreach ($results as $result){
-        //     // $result = $result->fetch_object();
-        //     // dump($result->name);
-        // }
-        // dump($result->fetch_object());
-        // return $result;
-        /* check connection */
-        // if ($mysqli->connect_errno) {
-        //     printf("Connect failed: %s\n", $mysqli->connect_error);
-        //     exit();
-        // }
-
-        // /* Create table doesn't return a resultset */
-        // // if ($mysqli->query("CREATE TEMPORARY TABLE myCity LIKE City") === TRUE) {
-        // //     printf("Table myCity successfully created.\n");
-        // // }
-
-        // /* Select queries return a resultset */
-        // if ($result = $mysqli->query("SELECT Name FROM USERS LIMIT 10")) {
-        //     printf("Select returned %d rows.\n", $result->num_rows);
-
-        //     /* free result set */
-        //     $result->close();
-        // }
-
-        // /* If we have to retrieve large amount of data we use MYSQLI_USE_RESULT */
-        // if ($result = $mysqli->query("SELECT * FROM City", MYSQLI_USE_RESULT)) {
-
-        //     /* Note, that we can't execute any functions which interact with the
-        //         server until result set was closed. All calls will return an
-        //         'out of sync' error */
-        //     if (!$mysqli->query("SET @a:='this will not work'")) {
-        //         printf("Error: %s\n", $mysqli->error);
-        //     }
-        //     $result->close();
-        // }
-
-        // $mysqli->close();
+        $chartjs = app()->chartjs
+            ->name('lineChartTest')
+            ->type('line')
+            ->size(['width' => 400, 'height' => 200])
+            ->labels(['January', 'February', 'March', 'April', 'May', 'June', 'July'])
+            ->datasets([
+                [
+                    "label" => "My First dataset",
+                    'backgroundColor' => "rgba(38, 185, 154, 0.31)",
+                    'borderColor' => "rgba(38, 185, 154, 0.7)",
+                    "pointBorderColor" => "rgba(38, 185, 154, 0.7)",
+                    "pointBackgroundColor" => "rgba(38, 185, 154, 0.7)",
+                    "pointHoverBackgroundColor" => "#fff",
+                    "pointHoverBorderColor" => "rgba(220,220,220,1)",
+                    'data' => [65, 59, 80, 81, 56, 55, 40],
+                ],
+                [
+                    "label" => "My Second dataset",
+                    'backgroundColor' => "rgba(38, 185, 154, 0.31)",
+                    'borderColor' => "rgba(38, 185, 154, 0.7)",
+                    "pointBorderColor" => "rgba(38, 185, 154, 0.7)",
+                    "pointBackgroundColor" => "rgba(38, 185, 154, 0.7)",
+                    "pointHoverBackgroundColor" => "#fff",
+                    "pointHoverBorderColor" => "rgba(220,220,220,1)",
+                    'data' => [12, 33, 44, 44, 55, 23, 40],
+                ]
+            ])
+            ->options([]);
     }
 }

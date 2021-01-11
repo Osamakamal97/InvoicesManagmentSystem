@@ -30,6 +30,7 @@ class Invoice extends Main
         'status'
     ];
 
+
     /**
      * @return string
      */

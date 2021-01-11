@@ -225,12 +225,10 @@
                                                         <td class="btn-icon-list">
                                                             <span style="display: none">
                                                                 {{ $attachemnt_name = str_replace('storage/app/invoices/'.$invoice->invoice_number.'/', '', $attachment->file_path) }}</span>
-                                                            
                                                             <a href="{{ route('invoiceAttachment.getAttachment' ,[
                                                                 'invoice_number'=>$invoice->invoice_number,
-                                                                'attachment'=>$attachemnt_name,
-                                                                ]) }}" class="btn btn-primary btn-sm btn-icon"
-                                                                target="_blank">
+                                                                'attachment'=>$attachemnt_name ]) }}"
+                                                                class="btn btn-primary btn-sm btn-icon" target="_blank">
                                                                 <i class="typcn typcn-eye-outline"></i></a>
                                                             <a href="{{ route('invoiceAttachment.downloadAttachment' ,[
                                                                 'invoice_number'=>$invoice->invoice_number,
