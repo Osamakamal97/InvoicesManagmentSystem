@@ -33,7 +33,9 @@ function totalInvoicesPercentageByStatus($status)
 {
     $invoices = Invoice::count();
     $tInvoices = Invoice::whereStatus($status)->count();
-    return number_format(($tInvoices / $invoices) * 100, 2);
+    if ($invoices > 0)
+        return number_format(($tInvoices / $invoices) * 100, 2);
+    return 0;
 }
 
 function invoiceCountByStatus($status)

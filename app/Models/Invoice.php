@@ -73,9 +73,12 @@ class Invoice extends Main
 
     // Mutator
 
-    public function setUserIdAttribute()
+    public function setUserIdAttribute($user_id)
     {
-        $this->attributes['user_id'] = auth()->user()->id;
+        if (auth()->check())
+            $this->attributes['user_id'] = auth()->user()->id;
+        else
+            $this->attributes['user_id'] = $user_id;
     }
 
     public function setInvoiceDateAttribute($invoice_date)

@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\InvoicesExport;
+use App\Models\User;
+use App\Notifications\CreateInvoice;
 
 class InvoiceController extends Controller
 {
@@ -183,6 +185,10 @@ class InvoiceController extends Controller
             }
             // Send mail
             // Notification::send(auth()->user(), new InvoiceAdded($invoice_id));
+            // Send notifications for admins only
+            // Notification::send(User::role('admin')->get(), new CreateInvoice(Invoice::latest()->first()));
+            $users = User::where('id', '!=', auth()->user()->id)->get();
+            Notification::send($users, new CreateInvoice(Invoice::latest()->first()));
             // Commit DB insertions
             DB::commit();
             return redirect()->route('invoices.index')->with('success', 'تم إنشاء الفاتورة بنجاح.');
@@ -287,4 +293,5 @@ class InvoiceController extends Controller
             return redirect()->back()->with('error', 'error');
         }
     }
+
 }

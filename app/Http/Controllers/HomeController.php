@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Charts\SampleChart;
 use App\Models\Invoice;
+use App\Models\User;
+use Carbon\Carbon;
 use Chartisan\PHP\Chartisan;
 use ConsoleTVs\Charts\ChartsController;
+use CreateNotificationsTable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use mysqli;
 use PhpOffice\PhpSpreadsheet\Helper\Sample;
 
@@ -36,7 +40,7 @@ class HomeController extends Controller
         $chartjs = app()->chartjs
             ->name('barChartTest')
             ->type('bar')
-            ->size(['width' => 350, 'height' => 200])
+            ->size(['width' => 400, 'height' => 200])
             ->labels(['الفواتير المدفوعة', 'الفواتير المدفوعة جزئياً', 'الفواتير الغير مدفوعة'])
             ->datasets([
                 [
@@ -54,8 +58,7 @@ class HomeController extends Controller
                     'backgroundColor' => ['red'],
                     'data' => [$unpaid_invoices_count]
                 ],
-            ])
-            ->options([]);
+            ]);
 
         $pieChartjs = app()->chartjs
             ->name('pieChartTest')
@@ -64,13 +67,11 @@ class HomeController extends Controller
             ->labels(['الفواتير المدفوعة', 'الفواتير المدفوعة جزئياً', 'الفواتير الغير مدفوعة'])
             ->datasets([
                 [
-                    'backgroundColor' => ['green', 'orange','red'],
-                    'data' => [$paid_invoices_count,$part_paid_invoices_count,$unpaid_invoices_count]
+                    'backgroundColor' => ['green', 'orange', 'red'],
+                    'data' => [$paid_invoices_count, $part_paid_invoices_count, $unpaid_invoices_count]
                 ]
             ])
             ->options([]);
-
-        
 
         return view('home', compact(['chartjs', 'pieChartjs']));
     }

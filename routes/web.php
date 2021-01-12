@@ -8,6 +8,7 @@ use App\Http\Controllers\{
     InvoiceController,
     InvoiceDetailsController,
     InvoicesReportController,
+    NotificationController,
     ProductController,
     RoleController,
     SectionController,
@@ -69,6 +70,9 @@ Route::group(['middleware' => ['auth']], function () {
     // Customers Reports Routes 
     Route::get('customers-reports', [CustomersReportController::class, 'index'])->name('customersReport.index');
     Route::post('customers-reports', [CustomersReportController::class, 'search'])->name('customersReport.search');
+    // Notifications
+    Route::get('notification/read-all',[NotificationController::class,'readAllNotifications'])->name('notifications.readAll');
+    Route::get('notification/{notification_id}/read/{invoice_id}',[NotificationController::class,'readNotification'])->name('notifications.read');
 });
 
 Route::get('section/{id}', [InvoiceController::class, 'getProducts']);

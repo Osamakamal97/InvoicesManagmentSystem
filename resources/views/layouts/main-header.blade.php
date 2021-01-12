@@ -101,7 +101,9 @@
 							<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
 							</path>
 							<polyline points="22,6 12,13 2,6"></polyline>
-						</svg><span class=" pulse-danger"></span></a>
+						</svg>
+						{{-- <span class=" pulse-danger"></span> --}}
+					</a>
 					<div class="dropdown-menu">
 						<div class="menu-header-content bg-primary text-right">
 							<div class="d-flex">
@@ -184,6 +186,7 @@
 						</div>
 					</div>
 				</div>
+				@can('show_notifications')
 				<div class="dropdown nav-item main-header-notification">
 					<a class="new nav-link" href="#">
 						<svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none"
@@ -191,96 +194,73 @@
 							class="feather feather-bell">
 							<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
 							<path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-						</svg><span class=" pulse"></span></a>
+						</svg>
+						@if (auth()->user()->unreadNotifications->count()>0)
+						<span class=" pulse"></span>
+						@endif
+					</a>
 					<div class="dropdown-menu">
 						<div class="menu-header-content bg-primary text-right">
 							<div class="d-flex">
-								<h6 class="dropdown-title mb-1 tx-15 text-white font-weight-semibold">Notifications</h6>
-								<span class="badge badge-pill badge-warning mr-auto my-auto float-left">Mark All
-									Read</span>
+								<h6 class="dropdown-title mb-1 tx-15 text-white font-weight-semibold">الإشعارات</h6>
+								<a class="badge badge-pill badge-warning mr-auto my-auto float-left"
+									href="{{ route('notifications.readAll') }}">قراءة الكل</a>
 							</div>
-							<p class="dropdown-title-text subtext mb-0 text-white op-6 pb-0 tx-12 ">You have 4 unread
-								Notifications</p>
+							<p class="dropdown-title-text subtext mb-0 text-white op-6 pb-0 tx-12">
+								<h6 style="color: yellow" id="notifications_count">
+									{{ auth()->user()->unreadNotifications->count() }}
+								</h6>
+							</p>
 						</div>
-						<div class="main-notification-list Notification-scroll">
-							<a class="d-flex p-3 border-bottom" href="#">
-								<div class="notifyimg bg-pink">
-									<i class="la la-file-alt text-white"></i>
+						<div id="unreadNotifications">
+							@foreach (auth()->user()->unreadNotifications as $notification)
+								<div class="main-notification-list Notification-scroll">
+									<a class="d-flex p-3 border-bottom"
+										href="{{ url('InvoicesDetails') }}/{{ $notification->data['id'] }}">
+										<div class="notifyimg bg-pink">
+											<i class="la la-file-alt text-white"></i>
+										</div>
+										<div class="mr-3">
+											<h5 class="notification-label mb-1">{{ $notification->data['title'] }}
+												{{ $notification->data['user'] }}
+											</h5>
+											<div class="notification-subtext">{{ $notification->created_at }}</div>
+										</div>
+									</a>
 								</div>
-								<div class="mr-3">
-									<h5 class="notification-label mb-1">New files available</h5>
-									<div class="notification-subtext">10 hour ago</div>
-								</div>
-								<div class="mr-auto">
-									<i class="las la-angle-left text-left text-muted"></i>
-								</div>
-							</a>
-							<a class="d-flex p-3" href="#">
-								<div class="notifyimg bg-purple">
-									<i class="la la-gem text-white"></i>
-								</div>
-								<div class="mr-3">
-									<h5 class="notification-label mb-1">Updates Available</h5>
-									<div class="notification-subtext">2 days ago</div>
-								</div>
-								<div class="mr-auto">
-									<i class="las la-angle-left text-left text-muted"></i>
-								</div>
-							</a>
-							<a class="d-flex p-3 border-bottom" href="#">
-								<div class="notifyimg bg-success">
-									<i class="la la-shopping-basket text-white"></i>
-								</div>
-								<div class="mr-3">
-									<h5 class="notification-label mb-1">New Order Received</h5>
-									<div class="notification-subtext">1 hour ago</div>
-								</div>
-								<div class="mr-auto">
-									<i class="las la-angle-left text-left text-muted"></i>
-								</div>
-							</a>
-							<a class="d-flex p-3 border-bottom" href="#">
-								<div class="notifyimg bg-warning">
-									<i class="la la-envelope-open text-white"></i>
-								</div>
-								<div class="mr-3">
-									<h5 class="notification-label mb-1">New review received</h5>
-									<div class="notification-subtext">1 day ago</div>
-								</div>
-								<div class="mr-auto">
-									<i class="las la-angle-left text-left text-muted"></i>
-								</div>
-							</a>
-							<a class="d-flex p-3 border-bottom" href="#">
-								<div class="notifyimg bg-danger">
-									<i class="la la-user-check text-white"></i>
-								</div>
-								<div class="mr-3">
-									<h5 class="notification-label mb-1">22 verified registrations</h5>
-									<div class="notification-subtext">2 hour ago</div>
-								</div>
-								<div class="mr-auto">
-									<i class="las la-angle-left text-left text-muted"></i>
-								</div>
-							</a>
-							<a class="d-flex p-3 border-bottom" href="#">
-								<div class="notifyimg bg-primary">
-									<i class="la la-check-circle text-white"></i>
-								</div>
-								<div class="mr-3">
-									<h5 class="notification-label mb-1">Project has been approved</h5>
-									<div class="notification-subtext">4 hour ago</div>
-								</div>
-								<div class="mr-auto">
-									<i class="las la-angle-left text-left text-muted"></i>
-								</div>
-							</a>
+							@endforeach
 						</div>
+						{{-- <div id="unread_notifications">
+							@foreach (auth()->user()->unreadNotifications as $notification)
+							<div class="main-notification-list Notification-scroll">
+								<a class="d-flex p-3 border-bottom"
+									href="{{ route('notifications.read',[$notification, $notification->data['id']]) }}">
+									<div class="mr-3">
+										<h5 class="notification-label mb-1">{{ $notification->data['title'] }} :
+											{{ $notification->data['user'] }}</h5>
+										<div class="notification-subtext"> منذ
+											@if (now()->diffInHours($notification->created_at) == 0)
+											{{ now()->diffInMinutes($notification->created_at) }}
+											دقيقة
+											@else
+											{{ now()->diffInHours($notification->created_at) }}
+											ساعة
+											@endif
+										</div>
+									</div>
+									<div class="mr-auto">
+										<i class="las la-angle-left text-left text-muted"></i>
+									</div>
+								</a>
+							</div>
+							@endforeach
+						</div> --}}
 						<div class="dropdown-footer">
 							<a href="">VIEW ALL</a>
 						</div>
 					</div>
 				</div>
+				@endcan
 				<div class="nav-item full-screen fullscreen-button">
 					<a class="new nav-link full-screen-link" href="#"><svg xmlns="http://www.w3.org/2000/svg"
 							class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor"

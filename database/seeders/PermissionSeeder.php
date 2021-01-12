@@ -42,8 +42,13 @@ class PermissionSeeder extends Seeder
             'edit_invoice_status',
             'print_invoice',
             'export_invoices_excel',
+            // Invoice Details 
+            'show_invoices_details',
+
+            // Invoice Attachments
             'add_invoice_attachment',
             'view_invoice_attachment',
+            'show_invoice_attachment',
             'download_invoice_attachment',
             'delete_invoice_attachment',
             // Customer Reports things
@@ -77,6 +82,8 @@ class PermissionSeeder extends Seeder
             'edit_section',
             'delete_section',
             // '',
+            // Notifications
+            'show_notifications',
         ];
         foreach ($permissions as $permission) {
             Permission::create(['name' => $permission]);

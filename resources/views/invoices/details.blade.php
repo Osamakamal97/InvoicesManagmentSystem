@@ -173,6 +173,7 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="tab3">
+                                        @can('add_invoice_attachment')
                                         <div class="card box-shadow-0 ">
                                             <div class="card-header">
                                                 <h4 class="card-title mb-1">إضافة مرفقات</h4>
@@ -203,6 +204,7 @@
                                                 </form>
                                             </div>
                                         </div>
+                                        @endcan
                                         <div class="table-responsive">
                                             <table class="table table-hover mb-0 text-md-nowrap">
                                                 <thead>
@@ -218,29 +220,34 @@
                                                     @foreach ($invoice_attachments as $attachment)
                                                     <tr>
                                                         <th scope="row">{{ $loop->iteration }}</th>
-
                                                         <td>{{ $invoice->invoice_number }}</td>
                                                         <td>{{ $attachment->created_by }}</td>
                                                         <td class="wd-25p">{{ $attachment->created_at }}</td>
                                                         <td class="btn-icon-list">
                                                             <span style="display: none">
                                                                 {{ $attachemnt_name = str_replace('storage/app/invoices/'.$invoice->invoice_number.'/', '', $attachment->file_path) }}</span>
+                                                            @can('show_invoice_attachment')
                                                             <a href="{{ route('invoiceAttachment.getAttachment' ,[
                                                                 'invoice_number'=>$invoice->invoice_number,
                                                                 'attachment'=>$attachemnt_name ]) }}"
                                                                 class="btn btn-primary btn-sm btn-icon" target="_blank">
                                                                 <i class="typcn typcn-eye-outline"></i></a>
+                                                            @endcan
+                                                            @can('download_invoice_attachment')
                                                             <a href="{{ route('invoiceAttachment.downloadAttachment' ,[
                                                                 'invoice_number'=>$invoice->invoice_number,
                                                                 'attachment'=>$attachemnt_name,
                                                                 ]) }}" class="btn btn-info btn-sm btn-icon"
                                                                 target="_blank">
                                                                 <i class="typcn typcn-download"></i></a>
+                                                            @endcan
+                                                            @can('delete_invoice_attachment')
                                                             <a href="#deleteModal"
                                                                 class="btn btn-danger btn-sm btn-icon"
                                                                 data-effect="effect-flip-horizontal" data-toggle="modal"
                                                                 data-id="{{ $attachment->id }}">
                                                                 <i class="typcn typcn-delete-outline"></i></a>
+                                                            @endcan
                                                         </td>
                                                     </tr>
                                                     @endforeach
