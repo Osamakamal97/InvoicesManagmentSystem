@@ -44,7 +44,6 @@ class PermissionSeeder extends Seeder
             'export_invoices_excel',
             // Invoice Details 
             'show_invoices_details',
-
             // Invoice Attachments
             'add_invoice_attachment',
             'view_invoice_attachment',

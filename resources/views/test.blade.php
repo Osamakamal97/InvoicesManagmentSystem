@@ -9,7 +9,7 @@
 
 <body>
     <!-- Chart's container -->
-    <div id="chart" style="height: 300px;"></div>
+    <div id="chart" style="height: 500px;"></div>
     <!-- Charting library -->
     <script src="https://unpkg.com/echarts/dist/echarts.min.js"></script>
     <!-- Chartisan -->

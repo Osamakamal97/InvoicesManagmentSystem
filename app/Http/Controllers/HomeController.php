@@ -33,6 +33,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+
         $paid_invoices_count = invoiceCountByStatus(1);
         $part_paid_invoices_count = invoiceCountByStatus(2);
         $unpaid_invoices_count = invoiceCountByStatus(0);
