@@ -267,8 +267,6 @@
 <!-- Internal Form-validation js -->
 <script src="{{URL::asset('assets/js/form-validation.js')}}"></script>
 <script>
-</script>
-<script>
     const oldInvoiceDate = "{{ old('invoice_date') }}";
     let date = new Date();
     let selectedDate = (date.getMonth()+1) + '/' + date.getDate() +'/' +date.getFullYear();

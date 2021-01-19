@@ -34,9 +34,3 @@
 </body>
 
 </html>
-{{-- <script>
-	setInterval(function () {
-		$("#notifications_count").load(window.location.href + "#notifications_count");
-		$("#unread_notifications").load(window.location.href + "#unread_notifications");
-	}, 5000);
-</script> --}}

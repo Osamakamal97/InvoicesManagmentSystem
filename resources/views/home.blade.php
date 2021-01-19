@@ -170,11 +170,13 @@
 <script src="{{URL::asset('assets/plugins/jquery.flot/jquery.flot.categories.js')}}"></script>
 <script src="{{URL::asset('assets/js/dashboard.sampledata.js')}}"></script>
 <script src="{{URL::asset('assets/js/chart.flot.sampledata.js')}}"></script>
-<!--Internal Apexchart js-->
 <!-- Internal Map -->
+<script src="{{URL::asset('assets/plugins/jqvmap/jquery.vmap.min.js')}}"></script>
+<script src="{{URL::asset('assets/plugins/jqvmap/maps/jquery.vmap.usa.js')}}"></script>
 <script src="{{URL::asset('assets/js/modal-popup.js')}}"></script>
 <!--Internal  index js -->
 <script src="{{URL::asset('assets/js/index.js')}}"></script>
+<script src="{{URL::asset('assets/js/jquery.vmap.sampledata.js')}}"></script>
 <!-- Charting library -->
 <script src="https://unpkg.com/echarts/dist/echarts.min.js"></script>
 <!-- Chartisan -->

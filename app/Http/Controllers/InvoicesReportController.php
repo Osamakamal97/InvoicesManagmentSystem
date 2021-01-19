@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\InvoiceReportSearchRequest;
 use App\Models\Invoice;
+use App\Models\User;
+use App\Notifications\CreateInvoice;
 use Carbon\Carbon;
 
 class InvoicesReportController extends Controller
 {
     public function index()
     {
+        $user = User::first();
+        $user->notify(new CreateInvoice(Invoice::first()));
         // !This is add because there is a problem happen in view that can't catch it using isset
         $oldInputs['date_range'] = '';
         return view('invoicesReport.index', compact('oldInputs'));

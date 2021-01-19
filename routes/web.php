@@ -12,6 +12,7 @@ use App\Http\Controllers\{
     ProductController,
     RoleController,
     SectionController,
+    TestController,
     UserController,
 };
 use Illuminate\Support\Facades\{
@@ -23,8 +24,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::view('test', 'test');
-// Route::get('test', [HomeController::class, 'test']);
+// Route::view('test', 'test');
+Route::get('test', [TestController::class, 'index']);
 Route::view('app', 'layouts.app');
 
 Auth::routes();
