@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title','المستخدمين')
+@section('title',__('frontend.users'))
 @section('css')
 <!-- Internal Data table css -->
 <link href="{{URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" />
@@ -16,12 +16,21 @@
 <link href="{{URL::asset('assets/plugins/fileuploads/css/fileupload.css')}}" rel="stylesheet" type="text/css" />
 <!---Internal Fancy uploader css-->
 <link href="{{URL::asset('assets/plugins/fancyuploder/fancy_fileupload.css')}}" rel="stylesheet" />
+@if (config('app.locale') == 'ar')
 <!--Internal Sumoselect css-->
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect-rtl.css')}}">
 <!--Internal  TelephoneInput css-->
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/telephoneinput/telephoneinput-rtl.css')}}">
 <!--Internal Sumoselect css-->
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect-rtl.css')}}">
+@else
+<!--Internal Sumoselect css-->
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect.css')}}">
+<!--Internal  TelephoneInput css-->
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/telephoneinput/telephoneinput.css')}}">
+<!--Internal Sumoselect css-->
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect.css')}}">
+@endif
 <!---Internal  Prism css-->
 <link href="{{URL::asset('assets/plugins/prism/prism.css')}}" rel="stylesheet">
 <!--- Custom-scroll -->
@@ -32,8 +41,9 @@
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto">
         <div class="d-flex">
-            <h4 class="content-title mb-0 my-auto">المستخدمين</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                قائمة المستخدمين</span>
+            <h4 class="content-title mb-0 my-auto"><a href="{{ route('users.index') }}">{{ __('frontend.users') }}</a>
+            </h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                {{ __('frontend.users_list') }}</span>
         </div>
     </div>
 </div>
@@ -47,14 +57,15 @@
         <div class="card">
             <div class="card-header pb-0">
                 <div class="d-flex justify-content-between">
-                    <h4 class="card-title mg-b-0">المستخدمين</h4>
+                    <h4 class="card-title mg-b-0">{{ __('frontend.users') }}</h4>
                     <i class="mdi mdi-dots-horizontal text-gray"></i>
                 </div>
                 <div class="row">
                     @can('create_user')
                     <div class="col-sm-6 col-md-6 col-xl-3 mg-t-20">
-                        <a class="btn btn-outline-primary btn-block" href="{{ route('users.create') }}">إنشاء مستخدم
-                            جديد</a>
+                        <a class="btn btn-outline-primary btn-block" href="{{ route('users.create') }}">
+                            {{ __('frontend.create_new_user') }}
+                        </a>
                     </div>
                     @endcan
                 </div>
@@ -65,11 +76,11 @@
                         <thead>
                             <tr>
                                 <th class="border-bottom-0">#</th>
-                                <th class="border-bottom-0">الاسم</th>
-                                <th class="border-bottom-0">البريد الإلكتروني</th>
-                                <th class="border-bottom-0">الدور</th>
-                                <th class="border-bottom-0">الحالة</th>
-                                <th class="wd-10p border-bottom-0">العمليات</th>
+                                <th class="border-bottom-0">{{ __('frontend.name') }}</th>
+                                <th class="border-bottom-0">{{ __('frontend.email') }}</th>
+                                <th class="border-bottom-0">{{ __('frontend.role') }}</th>
+                                <th class="border-bottom-0">{{ __('frontend.status') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.operations') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -88,24 +99,24 @@
                                 <td class="text-center">
                                     @if ($user->status == 0)
                                     <span class="label text-danger d-flex">
-                                        <div class="dot-label bg-danger ml-1"></div>{{ $user->getStatus() }}
+                                        {{ $user->getStatus() }}
                                     </span>
                                     @else
                                     <span class="label text-success d-flex">
-                                        <div class="dot-label bg-success ml-1"></div>{{ $user->getStatus() }}
+                                        {{ $user->getStatus() }}
                                     </span>
                                     @endif
                                 </td>
                                 <td class="btn-icon-list " style="float: left">
                                     @can('edit_user')
                                     <a href="{{ route('users.edit' ,$user->id) }}" data-toggle="tooltip"
-                                        data-placement="top" title="تعديل المستخدم"
+                                        data-placement="top" title="{{ __('frontend.edit_user') }}"
                                         class="btn btn-warning btn-sm btn-icon">
                                         <i class="typcn typcn-edit"></i></a>
                                     @endcan
                                     @can('delete_user')
-                                    <span data-toggle="tooltip" data-placement="top" title="حذف المستخدم نهائياً"
-                                        style="margin-right: 5px;">
+                                    <span data-toggle="tooltip" data-placement="top" class="operations-buttons"
+                                        title="{{ __('frontend.delete_user_completely') }}">
                                         <a href="#deleteModal" class="btn btn-danger btn-sm btn-icon"
                                             data-effect="effect-flip-horizontal" data-toggle="modal"
                                             data-id="{{ $user->id }}" data-name="{{ $user->name }}">
@@ -129,13 +140,13 @@
             <div class="modal-content modal-content-demo">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        حذف المستخدم
+                        {{ __('frontend.delete_user') }}
                     </h6>
                     <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
                             aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mg-b-20 mg-x-20"> هل أنت متأكد من حذف المستخدم صاحبة الرقم <span id="user_number_delete"
+                    <p class="mg-b-20 mg-x-20"> {{ __('frontend.sure_delete_user') }} <span id="user_number_delete"
                             style="font-weight: bold"></span> ؟</p>
                     <form class="form-horizontal" action="{{ route('users.destroy', 0) }}" id="submit-delete-data"
                         method="POST">
@@ -145,8 +156,9 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn ripple btn-danger" type="submit"
-                        onclick="event.preventDefault();document.getElementById('submit-delete-data').submit()">حذف</button>
-                    <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">إلغاء</button>
+                        onclick="event.preventDefault();document.getElementById('submit-delete-data').submit()">{{ __('frontend.sure_delete_attachment') }}</button>
+                    <button class="btn ripple btn-secondary" data-dismiss="modal"
+                        type="button">{{ __('frontend.cancel') }}</button>
                 </div>
             </div>
         </div>
@@ -180,8 +192,13 @@
 <script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
 <!-- Internal Modal js-->
 <script src="{{URL::asset('assets/js/modal.js')}}"></script>
+@if (config('app.locale') == 'ar')
 <!--Internal  Datatable js -->
 <script src="{{URL::asset('assets/js-rtl/table-data.js')}}"></script>
+@else
+<!--Internal  Datatable js -->
+<script src="{{URL::asset('assets/js/table-data.js')}}"></script>
+@endif
 {{-- for select2 from form-elements --}}
 <!--Internal  Datepicker js -->
 <script src="{{URL::asset('assets/plugins/jquery-ui/ui/widgets/datepicker.js')}}"></script>

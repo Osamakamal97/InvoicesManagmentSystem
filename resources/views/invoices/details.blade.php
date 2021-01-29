@@ -1,4 +1,5 @@
 @extends('layouts.master')
+@section('title',__('frontend.invoice_details'))
 @section('css')
 <!---Internal  Prism css-->
 <link href="{{URL::asset('assets/plugins/prism/prism.css')}}" rel="stylesheet">
@@ -12,8 +13,10 @@
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto">
         <div class="d-flex">
-            <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                تفاصيل الفاتورة</span>
+            <h4 class="content-title mb-0 my-auto">
+                <a href="{{ route('invoices.index') }}">{{ __('frontend.invoices') }}</a></h4><span
+                class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                {{ __('frontend.invoice_details') }}</span>
         </div>
     </div>
 </div>
@@ -33,11 +36,12 @@
                                     <!-- Tabs -->
                                     <ul class="nav panel-tabs main-nav-line">
                                         <li class="nav-item"><a href="#tab1" class="nav-link active"
-                                                data-toggle="tab">معلومات الفاتورة</a></li>
-                                        <li class="nav-item"><a href="#tab2" class="nav-link" data-toggle="tab">حالات
-                                                الدفع</a></li>
+                                                data-toggle="tab">{{ __('frontend.invoice_details') }}</a></li>
+                                        <li class="nav-item"><a href="#tab2" class="nav-link" data-toggle="tab">
+                                                {{ __('frontend.payment_statuses') }}
+                                            </a></li>
                                         <li class="nav-item"><a href="#tab3" class="nav-link"
-                                                data-toggle="tab">المرفقات</a></li>
+                                                data-toggle="tab">{{ __('frontend.attachments') }}</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -46,19 +50,23 @@
                                     <div class="tab-pane active" id="tab1">
                                         <div class="row mg-t-20">
                                             <div class="col-md">
-                                                <label class="tx-gray-600">بيانات الاضافة</label>
+                                                <label
+                                                    class="tx-gray-600">{{ __('frontend.create_information') }}</label>
                                                 <div class="billed-to">
-                                                    <p>أُضيفت بواسطة: {{ $invoice->user->name }} <br>
-                                                        تم إضافتها في : {{ $invoice->created_at }}<br></p>
+                                                    <p>{{ __('frontend.create_by') }}: {{ $invoice->user->name }} <br>
+                                                        {{ __('frontend.created_at') }} : {{ $invoice->created_at }}<br>
+                                                    </p>
                                                 </div>
                                             </div>
                                             <div class="col-md">
-                                                <label class="tx-gray-600">بيانات الفاتورة</label>
-                                                <p class="invoice-info-row"><span>رقم الفاتورة</span>
+                                                <label class="tx-gray-600">{{ __('frontend.invoice_details') }}</label>
+                                                <p class="invoice-info-row">
+                                                    <span>{{ __('frontend.invoice_number') }}</span>
                                                     <span>{{ $invoice->invoice_number }}</span></p>
-                                                <p class="invoice-info-row"><span>تاريخ الإصدار:</span>
+                                                <p class="invoice-info-row">
+                                                    <span>{{ __('frontend.invoice_create_date') }}:</span>
                                                     <span>{{ $invoice->invoice_date }}</span></p>
-                                                <p class="invoice-info-row"><span>تاريخ الاستحقاق:</span>
+                                                <p class="invoice-info-row"><span>{{ __('frontend.due_date') }}:</span>
                                                     <span>{{ $invoice->due_date }}</span></p>
                                             </div>
                                         </div>
@@ -66,10 +74,10 @@
                                             <table class="table table-invoice border text-md-nowrap mb-0">
                                                 <thead>
                                                     <tr>
-                                                        <th class="wd-20p">القسم</th>
-                                                        <th class="wd-40p">المنتج</th>
-                                                        <th class="tx-center">الحالة</th>
-                                                        <th class="tx-right">مبلغ التحصيل</th>
+                                                        <th class="wd-20p">{{ __('frontend.section') }}</th>
+                                                        <th class="wd-40p">{{ __('frontend.product') }}</th>
+                                                        <th class="tx-center">{{ __('frontend.status') }}</th>
+                                                        <th class="tx-right">{{ __('frontend.collection_amount') }}</th>
                                                         <th class="tx-right"></th>
                                                     </tr>
                                                 </thead>
@@ -85,26 +93,27 @@
                                                         <td class="valign-middle" colspan="2" rowspan="4">
                                                             <div class="invoice-notes">
                                                                 <label
-                                                                    class="main-content-label tx-13">الملاحظات</label>
+                                                                    class="main-content-label tx-13">{{ __('frontend.note') }}</label>
                                                                 <p style="color: black">{{ $invoice->note }}.</p>
                                                             </div><!-- invoice-notes -->
                                                         </td>
-                                                        <td class="tx-right">قيمة الضريبة ({{ $invoice->rate_vat }}%)
+                                                        <td class="tx-right">{{ __('frontend.rate_VAT') }}
+                                                            ({{ $invoice->rate_vat }}%)
                                                         </td>
                                                         <td class="tx-right" colspan="2">${{ $invoice->value_vat }}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="tx-right">مبلغ العمولة</td>
+                                                        <td class="tx-right">{{ __('frontend.commission_amount') }}</td>
                                                         <td class="tx-right" colspan="2">
                                                             ${{ $invoice->commission_amount }}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="tx-right">الخصم</td>
+                                                        <td class="tx-right">{{ __('frontend.discount') }}</td>
                                                         <td class="tx-right" colspan="2">${{ $invoice->discount }}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td class="tx-right tx-uppercase tx-bold tx-inverse">الإجمالي
-                                                            شامل الضريبة</td>
+                                                        <td class="tx-right tx-uppercase tx-bold tx-inverse">
+                                                            {{__('frontend.total_with_discount')}}</td>
                                                         <td class="tx-right" colspan="2">
                                                             <h4 class="tx-primary tx-bold">${{ $invoice->total }}</h4>
                                                         </td>
@@ -119,14 +128,14 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>رقم الفاتورة</th>
-                                                        <th>نوع المنتج</th>
-                                                        <th>القسم</th>
-                                                        <th>حالة الدفع</th>
-                                                        <th>تاريخ الدفع</th>
-                                                        <th>ملاحظات</th>
-                                                        <th>تاريخ الإضافة</th>
-                                                        <th>المستخدم</th>
+                                                        <th>{{ __('frontend.invoice_number') }}</th>
+                                                        <th>{{ __('frontend.product') }}</th>
+                                                        <th>{{ __("frontend.section") }}</th>
+                                                        <th>{{ __('frontend.payment_status') }}</th>
+                                                        <th>{{ __('frontend.payment_date') }}</th>
+                                                        <th>{{ __('frontend.note') }}</th>
+                                                        <th>{{ __('frontend.invoice_create_date') }}</th>
+                                                        <th>{{ __('frontend.user') }}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -176,7 +185,7 @@
                                         @can('add_invoice_attachment')
                                         <div class="card box-shadow-0 ">
                                             <div class="card-header">
-                                                <h4 class="card-title mb-1">إضافة مرفقات</h4>
+                                                <h4 class="card-title mb-1">{{ __('frontend.add_attachments') }}</h4>
                                             </div>
                                             <div class="card-body pt-0">
                                                 <form action="{{ route('invoiceAttachment.store') }}" method="POST"
@@ -187,10 +196,12 @@
                                                         value="{{ $invoice->invoice_number }}">
                                                     <div class="row row-sm">
                                                         <div class="form-group col-lg-12">
-                                                            <label for="invoiceValueVat">المرفقات <span
-                                                                    class="tx-danger">* الصيغ المدعومة هي: pdf,
-                                                                    jpeg, jpg, png (يمكن إرفاق أكثر من
-                                                                    مُرفق)</span></label>
+                                                            <label
+                                                                for="invoiceValueVat">{{ __('frontend.attachments') }}
+                                                                <span class="tx-danger">*
+                                                                    {{ __('frontend.supported_formats') }}: pdf,
+                                                                    jpeg, jpg, png
+                                                                    ({{ __('frontend.can_add_more_than_one') }})</span></label>
                                                             <input type="file" name="attachments[]" multiple />
                                                             @error('invoice_number')
                                                             <ul class="parsley-errors-list filled" id="parsley-id-5">
@@ -200,7 +211,7 @@
                                                         </div>
                                                     </div>
                                                     <button type="submit"
-                                                        class="btn btn-primary mt-3 mb-0">إرسال</button>
+                                                        class="btn btn-primary mt-3 mb-0">{{ __('frontend.add') }}</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -210,10 +221,10 @@
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
-                                                        <th>رقم الفاتورة</th>
-                                                        <th>أضيف بواسطة</th>
-                                                        <th>تاريخ الإضافة</th>
-                                                        <th>العمليات</th>
+                                                        <th>{{ __('frontend.invoice_number') }}</th>
+                                                        <th>{{ __('frontend.create_by') }}</th>
+                                                        <th>{{ __('frontend.invoice_create_date') }}</th>
+                                                        <th>{{ __('frontend.operations') }}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -269,13 +280,13 @@
         <div class="modal-content modal-content-demo">
             <div class="modal-header">
                 <h6 class="modal-title">
-                    حذف المرفق
+                    {{ __('frontend.delete_attachemnt') }}
                 </h6>
                 <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
                         aria-hidden="true">&times;</span></button>
             </div>
             <div class="modal-body">
-                <p class="mg-b-20 mg-x-20"> هل أنت متأكد من حذف المرفق <span id="invoice_name"
+                <p class="mg-b-20 mg-x-20"> {{ __('frontend.sure_delete_attachment') }} <span id="invoice_name"
                         style="font-weight: bold"></span> ؟</p>
                 <form class="form-horizontal" action="{{ route('invoiceAttachment.destroy', 0) }}"
                     id="submit-delete-data" method="POST">
@@ -285,8 +296,9 @@
             </div>
             <div class="modal-footer">
                 <button class="btn ripple btn-danger" type="submit"
-                    onclick="event.preventDefault();document.getElementById('submit-delete-data').submit()">حذف</button>
-                <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">إلغاء</button>
+                    onclick="event.preventDefault();document.getElementById('submit-delete-data').submit()">{{ __('frontend.delete') }}</button>
+                <button class="btn ripple btn-secondary" data-dismiss="modal"
+                    type="button">{{ __('frontend.cancel') }}</button>
             </div>
         </div>
     </div>

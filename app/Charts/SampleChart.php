@@ -27,7 +27,7 @@ class SampleChart extends BaseChart
         $part_paid_invoices = Invoice::whereStatus(2)->count();
         $unpaid_invoices = Invoice::whereStatus(0)->count();
         return Chartisan::build()
-            ->labels(['الفواتير المدفوعة', 'الفواتير المدفوعة جزئيا', 'الفواتير الغير مدفوعة'])
+            ->labels([__('frontend.paid_invoices'), __('frontend.part_paid_invoices'), __('frontend.unpaid_invoices')])
             ->dataset('Sample', [$paid_invoices, $part_paid_invoices, $unpaid_invoices]);
     }
 }

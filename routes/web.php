@@ -3,6 +3,7 @@
 use App\Http\Controllers\{
     AdminController,
     CustomersReportController,
+    GeneralController,
     HomeController,
     InvoiceAttachmentController,
     InvoiceController,
@@ -24,6 +25,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('change-language/{locale}', [GeneralController::class, 'changeLanguage'])->name('change_locale');
+
 // Route::view('test', 'test');
 Route::get('test', [TestController::class, 'index']);
 Route::view('app', 'layouts.app');
@@ -41,6 +45,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::put('invoices/{invoice}/updateStatus', [InvoiceController::class, 'updateStatus'])->name('invoices.updateStatus');
     Route::get('invoices/{invoice}/print', [InvoiceController::class, 'print'])->name('invoices.print');
     Route::get('invoices/export', [InvoiceController::class, 'export'])->name('invoices.export');
+    Route::get('{payment_status}-invoices', [InvoiceController::class, 'getInvoicesByPaymentStatus'])
+        ->name('invoices.paid_invoices');
     // Resources
     Route::resources([
         'invoices' => InvoiceController::class,
@@ -49,8 +55,6 @@ Route::group(['middleware' => ['auth']], function () {
         'users' => UserController::class,
         'roles' => RoleController::class,
     ]);
-    Route::get('invoices/{payment_status}', [InvoiceController::class, 'getInvoicesByPaymentStatus'])
-        ->name('invoices.paid_invoices');
     // Invoice Details Routes
     Route::get('invoice/{invoice_id}/details', [InvoiceDetailsController::class, 'index'])->name('invoiceDetails.index');
     Route::post('invoices/archives/{invoice_id}/details', [InvoiceDetailsController::class, 'index'])
@@ -65,15 +69,15 @@ Route::group(['middleware' => ['auth']], function () {
         [InvoiceAttachmentController::class, 'downloadAttachment']
     )
         ->name('invoiceAttachment.downloadAttachment');
-    // Invoices Reports Routes 
+    // Invoices Reports Routes
     Route::get('invoices-reports', [InvoicesReportController::class, 'index'])->name('invoicesReports.index');
     Route::post('invoices-reports', [InvoicesReportController::class, 'search'])->name('invoicesReports.search');
-    // Customers Reports Routes 
+    // Customers Reports Routes
     Route::get('customers-reports', [CustomersReportController::class, 'index'])->name('customersReport.index');
     Route::post('customers-reports', [CustomersReportController::class, 'search'])->name('customersReport.search');
     // Notifications
-    Route::get('notification/read-all',[NotificationController::class,'readAllNotifications'])->name('notifications.readAll');
-    Route::get('notification/{notification_id}/read/{invoice_id}',[NotificationController::class,'readNotification'])->name('notifications.read');
+    Route::get('notification/read-all', [NotificationController::class, 'readAllNotifications'])->name('notifications.readAll');
+    Route::get('notification/{notification_id}/read/{invoice_id}', [NotificationController::class, 'readNotification'])->name('notifications.read');
 });
 
 Route::get('section/{id}', [InvoiceController::class, 'getProducts']);

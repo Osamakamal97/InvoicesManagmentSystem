@@ -1,6 +1,7 @@
-<script src="{{ asset('js/app.js') }}"></script>
 <!-- Back-to-top -->
 <a href="#top" id="back-to-top"><i class="las la-angle-double-up"></i></a>
+<!-- WebSocket required js -->
+<script src="{{ asset('js/app.js') }}"></script>
 <!-- JQuery min js -->
 <script src="{{URL::asset('assets/plugins/jquery/jquery.min.js')}}"></script>
 <!-- Bootstrap Bundle js -->
@@ -36,89 +37,40 @@
 <script src="{{URL::asset('assets/plugins/notify/js/notifIt.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/notify/js/notifit-custom.js')}}"></script>
 @livewireScripts
-{{-- <script>
-    Echo.private('events')
-        .listen('RealTimeMessage', (e) => console.log('Private RealTimeMessage: ' + e.message));
-
-</script> --}}
+<script>
+     var myItems = new PerfectScrollbar(".Notification-scroll", {
+                                wheelPropagation: true
+                            });
+            // $('.Notification-scroll').perfectScrollbar('update');
+            // $('myItems').perfectScrollbar('update');
+</script>
 @if (auth()->check())
 <script>
     Echo.private('App.Models.User.{{ auth()->user()->id }}')
         .notification((notification) => {
-            // console.log('notification: '+notification);
             // pulse when new notification
             document.getElementById('notification_pulse').style.display = '';
             // Increase number of notifications by one
             let notifications_count = document.getElementById('notifications_count');
             notifications_count.textContent = parseInt(notifications_count.innerText) + 1;
             // Add notifications
-            // let unread_notifications = document.querySelector('#unread_notifications');
-            // const date = new Date();
-            // seconds = seconds-(days*24*60*60)-(hours*60*60)-(minutes*60);
-            // const seconds =  $("#time_from").text(seconds);
-            //             },1000);
-            // var myVar = setInterval(myTimer, 1000);
             var d = new Date().getMinutes().toString();
-
-            $(".main-notification-list").append(`<a class='d-flex p-3 border-bottom' id='notification_id' href='{{ url('invoice/${notification.invoice_id}/details') }}'>`
+            $(".main-notification-list").prepend(`<a class='d-flex p-3 border-bottom' id='notification_id' href='{{ url('invoice/${notification.invoice_id}/details') }}'>`
                 +`<div class='mr-3'>`
                 +`<h5 class='notification-label mb-1'> ${notification.title}: ${notification.user} </h5>`
                 +`<div class='notification-subtext' id='time_from'>${d}</div></div><div class='mr-auto'></div></a>`);
 
-                var today = new Date();
+            var today = new Date();
+            // Update time every 5 seconds for real time notifications
+            var myVar = setInterval(myTimer, 5000);
+            // Get the diffirent between time that notification is notify and now time
+            function myTimer() {
+                let now = new Date();
+                var diffMs = (now - today);
+                var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
+                document.getElementById("time_from").innerHTML = "منذ " + diffMins + " دقيقة";
+            }
 
-                var myVar = setInterval(myTimer, 5000);
-
-                function myTimer() {
-                    let d = new Date();
-                    var diffMs = (d - today);
-                    var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
-                    document.getElementById("time_from").innerHTML = "منذ " + diffMins + " دقيقة";
-                    console.log(diffMins);
-
-                }
-
-                // function myTimer() {
-                //     var d = new Date().getMinutes();
-                //     document.getElementById("time_from").innerHTML = d.toLocaleTimeString();
-                // }
-    });
+        });
 </script>
-<script>
-
-    // var totalMinutes = $('.totalMin').html();
-
-    // var hours = Math.floor(totalMinutes / 60);          
-    // var minutes = 1 % 60;
-
-    // $('.convertedHour').html(hours);
-    // $('.convertedMin').html(minutes);    
-
-    // var today = new Date();
-
-    // var myVar = setInterval(myTimer(today), 5000);
-
-    // function myTimer(today) {
-    //     let d = new Date();
-    //     var diffMs = (d - today);
-    //     var diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000); // minutes
-    //     document.getElementById("time_from").innerHTML = diffMins;
-    //     console.log(diffMins);
-
-    // }
-</script>
-{{-- <script>
-    $(".main-notification-list").append(`<a class='d-flex p-3 border-bottom' id='notification_id' href='#'>`
-                +`<div class='mr-3'>`
-                +`<h5 class='notification-label mb-1'> ldksjfkldsfjslkafjl;askfd</h5>`
-                +`<div class='notification-subtext'>asdadadasd</div></div><div class='mr-auto'></div></a>`);
-    $(".main-notification-list").append(`<a class='d-flex p-3 border-bottom' id='notification_id' href='#'>`
-                +`<div class='mr-3'>`
-                +`<h5 class='notification-label mb-1'> ldksjfkldsfjslkafjl;askfd</h5>`
-                +`<div class='notification-subtext'>asdadadasd</div></div><div class='mr-auto'></div></a>`);
-    $(".main-notification-list").append(`<a class='d-flex p-3 border-bottom' id='notification_id' href='#'>`
-                +`<div class='mr-3'>`
-                +`<h5 class='notification-label mb-1'> ldksjfkldsfjslkafjl;askfd</h5>`
-                +`<div class='notification-subtext'>asdadadasd</div></div><div class='mr-auto'></div></a>`);
-</script> --}}
 @endif

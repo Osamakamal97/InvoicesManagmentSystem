@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title','المنتجات')
+@section('title',__('frontend.products'))
 @section('css')
 <!-- Internal Data table css -->
 <link href="{{URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" />
@@ -16,20 +16,30 @@
 <link href="{{URL::asset('assets/plugins/fileuploads/css/fileupload.css')}}" rel="stylesheet" type="text/css" />
 <!---Internal Fancy uploader css-->
 <link href="{{URL::asset('assets/plugins/fancyuploder/fancy_fileupload.css')}}" rel="stylesheet" />
+@if (config('app.locale') == 'ar')
 <!--Internal Sumoselect css-->
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect-rtl.css')}}">
 <!--Internal  TelephoneInput css-->
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/telephoneinput/telephoneinput-rtl.css')}}">
 <!--Internal Sumoselect css-->
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect-rtl.css')}}">
+@else
+<!--Internal Sumoselect css-->
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect.css')}}">
+<!--Internal  TelephoneInput css-->
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/telephoneinput/telephoneinput.css')}}">
+<!--Internal Sumoselect css-->
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect.css')}}">
+@endif
 @endsection
 @section('page-header')
 <!-- breadcrumb -->
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto">
         <div class="d-flex">
-            <h4 class="content-title mb-0 my-auto">الإعدادات</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                المنتجات</span>
+            <h4 class="content-title mb-0 my-auto">{{ __('frontend.settings') }}</h4><span
+                class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                {{ __('frontend.products') }}</span>
         </div>
     </div>
 </div>
@@ -43,13 +53,13 @@
         <div class="card">
             <div class="card-header pb-0">
                 <div class="d-flex justify-content-between">
-                    <h4 class="card-title mg-b-0">المنتجات</h4>
+                    <h4 class="card-title mg-b-0">{{ __('frontend.products') }}</h4>
                     <i class="mdi mdi-dots-horizontal text-gray"></i>
                 </div>
                 @can('create_product')
                 <div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
                     <a class="modal-effect btn btn-outline-primary btn-block" data-effect="effect-flip-horizontal"
-                        data-toggle="modal" href="#create_modal">إنشاء منتج جديد</a>
+                        data-toggle="modal" href="#create_modal">{{ __('frontend.create_new_product') }}</a>
                 </div>
                 @endcan
             </div>
@@ -59,11 +69,11 @@
                         <thead>
                             <tr>
                                 <th class="wd-5p border-bottom-0">#</th>
-                                <th class="wd-15p border-bottom-0">الاسم</th>
-                                <th class="wd-20p border-bottom-0">الوصف</th>
-                                <th class="wd-10p border-bottom-0">القسم</th>
-                                <th class="wd-5p border-bottom-0">الحالة</th>
-                                <th class="wd-10p border-bottom-0">العمليات</th>
+                                <th class="wd-15p border-bottom-0">{{ __('frontend.name') }}</th>
+                                <th class="wd-20p border-bottom-0">{{ __('frontend.description') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.section') }}</th>
+                                <th class="wd-5p border-bottom-0">{{ __('frontend.status') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.operations') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -76,11 +86,11 @@
                                 <td class="text-center">
                                     @if ($product->status == 0)
                                     <span class="label text-danger d-flex">
-                                        <div class="dot-label bg-danger ml-1"></div>{{ $product->getStatus() }}
+                                        {{ $product->getStatus() }}
                                     </span>
                                     @else
                                     <span class="label text-success d-flex">
-                                        <div class="dot-label bg-success ml-1"></div>{{ $product->getStatus() }}
+                                        {{ $product->getStatus() }}
                                     </span>
                                     @endif
                                 </td>
@@ -115,7 +125,7 @@
             <div class="modal-content modal-content-demo">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        إنشاء منتج جديد
+                        {{ __('frontend.create_new_product') }}
                     </h6>
                     <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
                             aria-hidden="true">&times;</span></button>
@@ -125,13 +135,13 @@
                         @csrf
                         <div class="form-group">
                             <input type="text" name="name" class="form-control" value="{{ old('name') }}"
-                                placeholder="الاسم">
+                                placeholder="{{ __('frontend.name') }}">
                         </div>
                         <div class="form-group">
-                            <p class="mg-b-10">الأقسام</p>
+                            <p class="mg-b-10">{{ __('frontend.section') }}</p>
                             <select class="form-control SlectBox" name="section_id" style="width: 100%;color: #4d5875">
-                                <option label="إختر قسم" disabled>
-                                    إختر قسم
+                                <option label=" {{ __('frontend.choose_section') }}" disabled>
+                                    {{ __('frontend.choose_section') }}
                                 </option>
                                 @foreach ($sections as $section)
                                 <option value="{{ $section->id }}"
@@ -142,7 +152,8 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <textarea class="form-control" name="description" placeholder="الوصف"
+                            <textarea class="form-control" name="description"
+                                placeholder="{{ __('frontend.description') }}"
                                 rows="3">{{ old('description') }}</textarea>
                         </div>
                         <input type="hidden" name="created_by" value="gg">
@@ -150,8 +161,10 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn ripple btn-primary" type="submit"
-                        onclick="event.preventDefault();document.getElementById('submit-data').submit()">إنشاء</button>
-                    <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">إغلاق</button>
+                        onclick="event.preventDefault();document.getElementById('submit-data').submit()">
+                        {{ __('frontend.create') }}</button>
+                    <button class="btn ripple btn-secondary" data-dismiss="modal"
+                        type="button">{{ __('frontend.cancel') }}</button>
                 </div>
             </div>
         </div>
@@ -163,7 +176,7 @@
             <div class="modal-content modal-content-demo">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        تعديل المنتج
+                        {{ __('frontend.edit_product') }}
                     </h6>
                     <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
                             aria-hidden="true">&times;</span></button>
@@ -174,13 +187,14 @@
                         @csrf
                         @method('PUT')
                         <div class="form-group">
-                            <input type="text" name="name" class="form-control" id="name" placeholder="الاسم">
+                            <input type="text" name="name" class="form-control" id="name"
+                                placeholder="{{ __('frontend.name') }}">
                         </div>
                         <div class="form-group">
-                            <p class="mg-b-10">الأقسام</p>
+                            <p class="mg-b-10">{{ __('frontend.section') }}</p>
                             <select class="form-control SlectBox" name="section_id" style="width: 100%;color: #4d5875;">
-                                <option label="إختر قسم" disabled>
-                                    إختر قسم
+                                <option label="{{ __('frontend.choose_section') }}" disabled>
+                                    {{ __('frontend.choose_section') }}
                                 </option>
                                 @foreach ($sections as $section)
                                 <option value="{{ $section->id }}"
@@ -191,15 +205,16 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <textarea class="form-control" name="description" placeholder="الوصف" id="description"
-                                rows="3"></textarea>
+                            <textarea class="form-control" name="description"
+                                placeholder="{{ __('frontend.description') }}" id="description" rows="3"></textarea>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button class="btn ripple btn-primary" type="submit"
-                        onclick="event.preventDefault();document.getElementById('submit-edit-data').submit()">تعديل</button>
-                    <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">إغلاق</button>
+                        onclick="event.preventDefault();document.getElementById('submit-edit-data').submit()">{{ __('frontend.edit') }}</button>
+                    <button class="btn ripple btn-secondary" data-dismiss="modal"
+                        type="button">{{ __('frontend.cancel') }}</button>
                 </div>
             </div>
         </div>
@@ -211,13 +226,13 @@
             <div class="modal-content modal-content-demo">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        حذف المنتج
+                        {{ __('frontend.delete_product') }}
                     </h6>
                     <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
                             aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mg-b-20 mg-x-20"> هل أنت متأكد من حذف المنتج <span id="product_name"
+                    <p class="mg-b-20 mg-x-20"> {{ __('frontend.sure_delete_product') }} <span id="product_name"
                             style="font-weight: bold"></span> ؟</p>
                     <form class="form-horizontal" action="{{ route('products.destroy', 0) }}" id="submit-delete-data"
                         method="POST">
@@ -227,8 +242,9 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn ripple btn-danger" type="submit"
-                        onclick="event.preventDefault();document.getElementById('submit-delete-data').submit()">حذف</button>
-                    <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">إلغاء</button>
+                        onclick="event.preventDefault();document.getElementById('submit-delete-data').submit()">{{ __('frontend.delete') }}</button>
+                    <button class="btn ripple btn-secondary" data-dismiss="modal"
+                        type="button">{{ __('frontend.cancel') }}</button>
                 </div>
             </div>
         </div>
@@ -262,8 +278,13 @@
 <script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
 <!-- Internal Modal js-->
 <script src="{{URL::asset('assets/js/modal.js')}}"></script>
+@if (config('app.locale') == 'ar')
 <!--Internal  Datatable js -->
 <script src="{{URL::asset('assets/js-rtl/table-data.js')}}"></script>
+@else
+<!--Internal  Datatable js -->
+<script src="{{URL::asset('assets/js/table-data.js')}}"></script>
+@endif
 {{-- for select2 from form-elements --}}
 <!--Internal  Datepicker js -->
 <script src="{{URL::asset('assets/plugins/jquery-ui/ui/widgets/datepicker.js')}}"></script>

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductRequest;
 use App\Models\Product;
 use App\Models\Section;
-use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -42,19 +41,8 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         Product::create($request->validated());
-        session()->flash('success', 'تم إنشاء المنتج بنجاح.');
+        session()->flash('success', __('notifications.success_create_product'));
         return redirect()->route('products.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Product $product)
-    {
-        //
     }
 
     /**
@@ -67,7 +55,7 @@ class ProductController extends Controller
     public function update(ProductRequest $request, Product $product)
     {
         $product->update($request->validated());
-        session()->flash('success', 'تم تعديل المنتج بنجاح.');
+        session()->flash('success', __('notifications.success_update_product'));
         return redirect()->route('products.index');
     }
 
@@ -80,7 +68,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-        session()->flash('success', 'تم حذف المنتج بنجاح.');
+        session()->flash('success', __('notifications.success_delete_product'));
         return redirect()->route('products.index');
     }
 }

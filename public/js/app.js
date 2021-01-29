@@ -56579,7 +56579,7 @@
         (function(module, exports, __webpack_require__) {
 
         __webpack_require__(
-            /*! /home/osamakj/Invoices/resources/js/app.js 
+            /*! /home/osamakj/Invoices/resources/js/app.js
                            "./resources/js/app.js"); __webpack_require__( /*! /home/osamakj/Invoices/resources/js/app.js */
             "./resources/js/app.js");
         module.exports = __webpack_require__( /*! /home/osamakj/Invoices/resources/sass/app.scss */ "./resources/sass/app.scss");
@@ -56590,4 +56590,3 @@
 
     /******/
 });
-public

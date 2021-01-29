@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\SectionRequest;
 use App\Models\Section;
-use Illuminate\Http\Request;
 
 class SectionController extends Controller
 {
@@ -37,19 +36,8 @@ class SectionController extends Controller
     public function store(SectionRequest $request)
     {
         Section::create($request->validated());
-        session()->flash('success', 'تم إنشاء القسم بنجاح.');
+        session()->flash('success', __('notifications.success_create_section'));
         return redirect()->route('sections.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Section  $section
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Section $section)
-    {
-        //
     }
 
     /**
@@ -62,7 +50,7 @@ class SectionController extends Controller
     public function update(SectionRequest $request, Section $section)
     {
         $section->update($request->validated());
-        session()->flash('success', 'تم تعديل القسم بنجاح.');
+        session()->flash('success', __('notifications.success_update_section'));
         return redirect()->route('sections.index');
     }
 
@@ -75,7 +63,7 @@ class SectionController extends Controller
     public function destroy(Section $section)
     {
         $section->delete();
-        session()->flash('success', 'تم حذف القسم بنجاح.');
+        session()->flash('success', __('notifications.success_delete_section'));
         return redirect()->route('sections.index');
     }
 }

@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title','التقارير')
+@section('title',__('frontend.invoices_reports'))
 @section('css')
 <!-- Internal Select2 css -->
 <link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
@@ -9,8 +9,13 @@
 <link href="{{URL::asset('assets/plugins/datatable/css/responsive.bootstrap4.min.css')}}" rel="stylesheet" />
 <link href="{{URL::asset('assets/plugins/datatable/css/jquery.dataTables.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/datatable/css/responsive.dataTables.min.css')}}" rel="stylesheet">
+@if (config('app.locale') == 'ar')
 <!--Internal Sumoselect css-->
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect-rtl.css')}}">
+@else
+<!--Internal Sumoselect css-->
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect.css')}}">
+@endif
 <!---Internal  Prism css-->
 <link href="{{URL::asset('assets/plugins/prism/prism.css')}}" rel="stylesheet">
 <!--- Custom-scroll -->
@@ -21,8 +26,9 @@
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto">
         <div class="d-flex">
-            <h4 class="content-title mb-0 my-auto">التقارير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                قائمة التقارير</span>
+            <h4 class="content-title mb-0 my-auto">{{ __('frontend.invoices') }}</h4><span
+                class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                {{ __('frontend.invoices_reports') }}</span>
         </div>
     </div>
 </div>
@@ -35,30 +41,33 @@
     <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
         <div class="card box-shadow-0 ">
             <div class="card-header">
-                <h4 class="card-title mb-1">إنشاء فاتورة</h4>
+                <h4 class="card-title mb-1">{{ __('frontend.invoices_reports') }}</h4>
             </div>
             <div class="card-body pt-0">
                 <form action="{{ route('invoicesReports.search') }}" method="POST">
                     @csrf
                     <div class="row mg-t-10">
-                        <label for="name" style="padding-right: 12px;padding-bottom: 15px;">نوع البحث</label>
+                        <label for="name"
+                            style="padding-bottom: 15px;" class="invoice-search-type">{{ __('frontend.search_type') }}</label>
                         <div class="col-lg-3">
                             <label class="rdiobox"><input checked name="search_type" value="by_invoice_type"
                                     id="invoice_type" type="radio">
-                                <span>بحث بنوع الفاتورة</span></label>
+                                <span>{{ __('frontend.search_by_invoice_type') }}</span></label>
                         </div>
                         <div class="col-lg-3 mg-t-20 mg-lg-t-0">
                             <label class="rdiobox"><input name="search_type" value="by_invoice_number"
                                     id="invoice_number" type="radio">
-                                <span>بحث برقم الفاتورة</span></label>
+                                <span>{{ __('frontend.search_by_invoice_type') }}</span></label>
                         </div>
                     </div>
                     <div class="row row-sm" id="invoice_number_search_components" style="display: none">
                         <div class="form-group col-lg-4">
-                            <label for="invoice_number">رقم الفاتورة<span class="tx-danger">*</span></label>
+                            <label for="invoice_number">{{ __('frontend.invoice_number') }}<span
+                                    class="tx-danger">*</span></label>
                             <input type="text" name="invoice_number" autofocus
                                 class="form-control @error('invoice_number') parsley-error @enderror"
-                                id="invoice_number" placeholder="رقم الفاتورة" value="{{ old('invoice_number') }}">
+                                id="invoice_number" placeholder="{{ __('frontend.invoice_number') }}"
+                                value="{{ old('invoice_number') }}">
                             @error('invoice_number')
                             <ul class="parsley-errors-list filled" id="parsley-id-5">
                                 <li class="parsley-required">{{ $message }}</li>
@@ -68,19 +77,20 @@
                     </div>
                     <div class="row row-sm" id="invoice_type_search_components">
                         <div class="form-group col-lg-4">
-                            <label for="invoice_status">حالة الفاتورة<span class="tx-danger">*</span></label>
+                            <label for="invoice_status">{{ __('frontend.payment_status') }}<span
+                                    class="tx-danger">*</span></label>
                             <select class="form-control SlectBox" name="invoice_status" id="sectionId" placeholder=""
                                 style="width: 100%;color: #4d5875; @error('invoice_status') border-color: red @enderror">
-                                <option>إختر حالة الفاتورة</option>
+                                <option>{{ __('frontend.choose_payment_status') }}</option>
                                 <option label="0" value="1"
                                     {{ isset($oldInputs['invoice_status']) && $oldInputs['invoice_status'] == 1 ? 'selected' : '' }}>
-                                    الفواتير المدفوعة</option>
+                                    {{ __('frontend.paid_invoices') }}</option>
                                 <option label="0" value="2"
                                     {{ isset($oldInputs['invoice_status']) && $oldInputs['invoice_status'] == 2 ? 'selected' : '' }}>
-                                    الفواتير المدفوعة جزئياً</option>
+                                    {{ __('frontend.part_paid_invoices') }}</option>
                                 <option label="0" value="0"
                                     {{ isset($oldInputs['invoice_status']) && $oldInputs['invoice_status'] == 0 ? 'selected' : '' }}>
-                                    الفواتير الغير مدفوع</option>
+                                    {{ __('frontend.unpaid_invoices') }}</option>
                             </select>
                             @error('invoice_status')
                             <ul class="parsley-errors-list filled" id="parsley-id-5">
@@ -89,7 +99,7 @@
                             @enderror
                         </div>
                         <div class="form-group col-lg-8">
-                            <label for="name">حدود التاريخ</label>
+                            <label for="name">{{ __('frontend.date_range') }}</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
@@ -102,7 +112,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary mt-3 mb-0">بحث</button>
+                    <button type="submit" class="btn btn-primary mt-3 mb-0">{{ __('frontend.search') }}</button>
                 </form>
             </div>
         </div>
@@ -120,14 +130,14 @@
                     <table class="table key-buttons text-md-nowrap" id="example">
                         <thead>
                             <tr>
-                                <th class="border-bottom-0">#</th>
-                                <th class="border-bottom-0">رقم الفاتورة</th>
-                                <th class="border-bottom-0">تاريخ الفاتورة</th>
-                                <th class="border-bottom-0">تاريخ الاستحقاق</th>
-                                <th class="border-bottom-0">المنتج</th>
-                                <th class="border-bottom-0">القسم</th>
-                                <th class="border-bottom-0">الرصيد الكلي</th>
-                                <th class="border-bottom-0">الحالة</th>
+                                <th class="wd-5p border-bottom-0">#</th>
+                                <th class="wd-12p border-bottom-0">{{ __('frontend.invoice_number') }}</th>
+                                <th class="wd-12p border-bottom-0">{{ __('frontend.invoice_create_date') }}</th>
+                                <th class="wd-12p border-bottom-0">{{ __('frontend.due_date') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.product') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.section') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.total_balance') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.status') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -143,19 +153,19 @@
                                 <td class="text-center">
                                     @if ($invoice->status == 0)
                                     <span class="label text-danger d-flex">
-                                        <div class="dot-label bg-danger ml-1"></div>{{ $invoice->getStatus() }}
+                                        {{ $invoice->getStatus() }}
                                     </span>
                                     @elseif($invoice->status == 1)
                                     <span class="label text-success d-flex">
-                                        <div class="dot-label bg-success ml-1"></div>{{ $invoice->getStatus() }}
+                                        {{ $invoice->getStatus() }}
                                     </span>
                                     @elseif($invoice->status == 2)
                                     <span class="label text-warning d-flex">
-                                        <div class="dot-label bg-warning ml-1"></div>{{ $invoice->getStatus() }}
+                                        {{ $invoice->getStatus() }}
                                     </span>
                                     @else
                                     <span class="label text-muted d-flex">
-                                        <div class="dot-label bg-gray-300 ml-1"></div>{{ $invoice->getStatus() }}
+                                       {{ $invoice->getStatus() }}
                                     </span>
                                     @endif
                                 </td>
@@ -171,7 +181,7 @@
     <div class="col-xl-12">
         <div class="card">
             <div class="card-header pb-0">
-                <h3>لا يوجد بيانات بخصوص هذا البحث</h3>
+                <h3>{{ __('frontend.no_search_results') }}</h3>
             </div>
         </div>
     </div>

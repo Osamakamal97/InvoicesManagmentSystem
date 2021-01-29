@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title','الفواتير')
+@section('title',__('frontend.archive_invoices'))
 @section('css')
 <!-- Internal Data table css -->
 <link href="{{URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" />
@@ -28,8 +28,10 @@
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto">
         <div class="d-flex">
-            <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                قائمة الفواتير</span>
+            <h4 class="content-title mb-0 my-auto">
+                <a href="{{ route('invoices.index') }}">{{ __('frontend.invoices') }}</a></h4><span
+                class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                {{ __('frontend.'.$page_type) }}</span>
         </div>
     </div>
 </div>
@@ -43,13 +45,13 @@
         <div class="card">
             <div class="card-header pb-0">
                 <div class="d-flex justify-content-between">
-                    <h4 class="card-title mg-b-0">الفواتير</h4>
+                    <h4 class="card-title mg-b-0">{{ __('frontend.archive_invoices') }}</h4>
                     <i class="mdi mdi-dots-horizontal text-gray"></i>
                 </div>
                 @can('create_invoice')
                 <div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
-                    <a class="btn btn-outline-primary btn-block" href="{{ route('invoices.create') }}">إنشاء فاتورة
-                        جديد</a>
+                    <a class="btn btn-outline-primary btn-block"
+                        href="{{ route('invoices.create') }}">{{__('frontend.create_invoice')}}</a>
                 </div>
                 @endcan
             </div>

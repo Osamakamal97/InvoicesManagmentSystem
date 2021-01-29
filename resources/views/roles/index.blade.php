@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title','الأدوار')
+@section('title',__('frontend.roles'))
 @section('css')
 <!-- Internal Data table css -->
 <link href="{{URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" />
@@ -13,8 +13,9 @@
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto">
         <div class="d-flex">
-            <h4 class="content-title mb-0 my-auto">الإعدادات</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                الأدوار</span>
+            <h4 class="content-title mb-0 my-auto"><a href="{{ route('roles.index') }}">{{ __('frontend.users') }}</a></h4><span
+                class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                {{ __('frontend.roles_and_permissions') }}</span>
         </div>
     </div>
 </div>
@@ -28,13 +29,13 @@
         <div class="card">
             <div class="card-header pb-0">
                 <div class="d-flex justify-content-between">
-                    <h4 class="card-title mg-b-0">الأدوار</h4>
+                    <h4 class="card-title mg-b-0">{{ __('frontend.roles') }}</h4>
                     <i class="mdi mdi-dots-horizontal text-gray"></i>
                 </div>
                 <div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
                     @can('create_role')
                     <a class="btn btn-outline-primary btn-block" data-effect="effect-flip-horizontal"
-                        href="{{ route('roles.create') }}">إنشاء دور جديد</a>
+                        href="{{ route('roles.create') }}">{{ __('frontend.create_new_role') }}</a>
                     @endcan
                 </div>
             </div>
@@ -44,8 +45,8 @@
                         <thead>
                             <tr>
                                 <th class="wd-5p border-bottom-0">#</th>
-                                <th class="border-bottom-0">الاسم</th>
-                                <th class="wd-15p border-bottom-0">العمليات</th>
+                                <th class="border-bottom-0">{{ __('frontend.name') }}</th>
+                                <th class="wd-15p border-bottom-0">{{ __('frontend.operations') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -87,13 +88,13 @@
             <div class="modal-content modal-content-demo">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        حذف الدور
+                        {{ __('frontend.delete_role') }}
                     </h6>
                     <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
                             aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mg-b-20 mg-x-20"> هل أنت متأكد من حذف الدور <span id="role_name"
+                    <p class="mg-b-20 mg-x-20"> {{ __('frontend.sure_delete_role') }} <span id="role_name"
                             style="font-weight: bold"></span> ؟</p>
                     <form class="form-horizontal" action="{{ route('roles.destroy', 0) }}" id="submit-delete-data"
                         method="POST">
@@ -103,8 +104,9 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn ripple btn-danger" type="submit"
-                        onclick="event.preventDefault();document.getElementById('submit-delete-data').submit()">حذف</button>
-                    <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">إلغاء</button>
+                        onclick="event.preventDefault();document.getElementById('submit-delete-data').submit()">{{ __('frontend.delete') }}</button>
+                    <button class="btn ripple btn-secondary" data-dismiss="modal"
+                        type="button">{{ __('frontend.cancel') }}</button>
                 </div>
             </div>
         </div>
@@ -136,8 +138,13 @@
 <script src="{{URL::asset('assets/plugins/datatable/js/buttons.colVis.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
+@if (config('app.locale') == 'ar')
 <!--Internal  Datatable js -->
 <script src="{{URL::asset('assets/js-rtl/table-data.js')}}"></script>
+@else
+<!--Internal  Datatable js -->
+<script src="{{URL::asset('assets/js/table-data.js')}}"></script>
+@endif
 <script>
     $('#deleteModal').on('show.bs.modal', function(event){
         var button = $(event.relatedTarget);

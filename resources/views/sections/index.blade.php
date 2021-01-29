@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title','الأقسام')
+@section('title',__('frontend.sections'))
 @section('css')
 <!-- Internal Data table css -->
 <link href="{{URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" />
@@ -18,8 +18,9 @@
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto">
         <div class="d-flex">
-            <h4 class="content-title mb-0 my-auto">الإعدادات</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                الأقسام</span>
+            <h4 class="content-title mb-0 my-auto">{{ __('frontend.settings') }}</h4><span
+                class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                {{ __('frontend.sections') }}</span>
         </div>
     </div>
 </div>
@@ -33,13 +34,13 @@
         <div class="card">
             <div class="card-header pb-0">
                 <div class="d-flex justify-content-between">
-                    <h4 class="card-title mg-b-0">الأقسام</h4>
+                    <h4 class="card-title mg-b-0">{{ __('frontend.settings') }}</h4>
                     <i class="mdi mdi-dots-horizontal text-gray"></i>
                 </div>
                 <div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
                     @can('create_section')
                     <a class="modal-effect btn btn-outline-primary btn-block" data-effect="effect-flip-horizontal"
-                        data-toggle="modal" href="#create_modal">إنشاء قسم جديد</a>
+                        data-toggle="modal" href="#create_modal">{{ __('frontend.create_new_section') }}</a>
                     @endcan
                 </div>
             </div>
@@ -49,11 +50,11 @@
                         <thead>
                             <tr>
                                 <th class="wd-5p border-bottom-0">#</th>
-                                <th class="wd-15p border-bottom-0">الاسم</th>
-                                <th class="wd-20p border-bottom-0">الوصف</th>
-                                <th class="wd-10p border-bottom-0">أنشئ بواسطة</th>
-                                <th class="wd-5p border-bottom-0">الحالة</th>
-                                <th class="wd-10p border-bottom-0">العمليات</th>
+                                <th class="wd-15p border-bottom-0">{{ __('frontend.name') }}</th>
+                                <th class="wd-20p border-bottom-0">{{ __('frontend.description') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.create_by') }}</th>
+                                <th class="wd-5p border-bottom-0">{{ __('frontend.status') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.operations') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,15 +66,10 @@
                                 <td>{{ $section->created_by }}</td>
                                 <td class="text-center">
                                     @if ($section->status == 0)
-                                    <span class="label text-danger d-flex">
-                                        <div class="dot-label bg-danger ml-1"></div>{{ $section->getStatus() }}
-                                    </span>
+                                    <span class="label text-danger d-flex">{{ $section->getStatus() }}</span>
                                     @else
-                                    <span class="label text-success d-flex">
-                                        <div class="dot-label bg-success ml-1"></div>{{ $section->getStatus() }}
-                                    </span>
+                                    <span class="label text-success d-flex">{{ $section->getStatus() }}</span>
                                     @endif
-
                                 </td>
                                 <td class="btn-icon-list">
                                     @can('edit_section')
@@ -106,7 +102,7 @@
             <div class="modal-content modal-content-demo">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        إنشاء قسم جديد
+                        {{ __('frontend.create_new_section') }}
                     </h6>
                     <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
                             aria-hidden="true">&times;</span></button>
@@ -116,10 +112,11 @@
                         @csrf
                         <div class="form-group">
                             <input type="text" name="name" class="form-control" value="{{ old('name') }}"
-                                placeholder="الاسم">
+                                placeholder="{{ __('frontend.name') }}">
                         </div>
                         <div class="form-group">
-                            <textarea class="form-control" name="description" placeholder="الوصف"
+                            <textarea class="form-control" name="description"
+                                placeholder="{{ __('frontend.description') }}"
                                 rows="3">{{ old('description') }}</textarea>
                         </div>
                         <input type="hidden" name="created_by" value="gg">
@@ -127,8 +124,9 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn ripple btn-primary" type="submit"
-                        onclick="event.preventDefault();document.getElementById('submit-data').submit()">إنشاء</button>
-                    <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">إغلاق</button>
+                        onclick="event.preventDefault();document.getElementById('submit-data').submit()">{{ __('frontend.create') }}</button>
+                    <button class="btn ripple btn-secondary" data-dismiss="modal"
+                        type="button">{{ __('frontend.cancel') }}</button>
                 </div>
             </div>
         </div>
@@ -140,7 +138,7 @@
             <div class="modal-content modal-content-demo">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        تعديل القسم
+                        {{ __('frontend.edit_section') }}
                     </h6>
                     <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
                             aria-hidden="true">&times;</span></button>
@@ -151,18 +149,20 @@
                         @csrf
                         @method('PUT')
                         <div class="form-group">
-                            <input type="text" name="name" class="form-control" id="name" placeholder="الاسم">
+                            <input type="text" name="name" class="form-control" id="name"
+                                placeholder="{{ __('frontend.name') }}">
                         </div>
                         <div class="form-group">
-                            <textarea class="form-control" name="description" placeholder="الوصف" id="description"
-                                rows="3"></textarea>
+                            <textarea class="form-control" name="description"
+                                placeholder="{{ __('frontend.description') }}" id="description" rows="3"></textarea>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button class="btn ripple btn-primary" type="submit"
-                        onclick="event.preventDefault();document.getElementById('submit-edit-data').submit()">تعديل</button>
-                    <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">إغلاق</button>
+                        onclick="event.preventDefault();document.getElementById('submit-edit-data').submit()">{{ __('frontend.edit') }}</button>
+                    <button class="btn ripple btn-secondary" data-dismiss="modal"
+                        type="button">{{ __('frontend.cancel') }}</button>
                 </div>
             </div>
         </div>
@@ -174,13 +174,13 @@
             <div class="modal-content modal-content-demo">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        حذف القسم
+                        {{ __('frontend.delete_section') }}
                     </h6>
                     <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
                             aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mg-b-20 mg-x-20"> هل أنت متأكد من حذف القسم <span id="section_name"
+                    <p class="mg-b-20 mg-x-20"> {{ __('frontend.sure_delete_section') }} <span id="section_name"
                             style="font-weight: bold"></span> ؟</p>
                     <form class="form-horizontal" action="{{ route('sections.destroy', 0) }}" id="submit-delete-data"
                         method="POST">
@@ -190,8 +190,9 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn ripple btn-danger" type="submit"
-                        onclick="event.preventDefault();document.getElementById('submit-delete-data').submit()">حذف</button>
-                    <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">إلغاء</button>
+                        onclick="event.preventDefault();document.getElementById('submit-delete-data').submit()">{{ __('frontend.sure_delete_attachment') }}</button>
+                    <button class="btn ripple btn-secondary" data-dismiss="modal"
+                        type="button">{{ __('frontend.cancel') }}</button>
                 </div>
             </div>
         </div>
@@ -225,8 +226,13 @@
 <script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
 <!-- Internal Modal js-->
 <script src="{{URL::asset('assets/js/modal.js')}}"></script>
+@if (config('app.locale') == 'ar')
 <!--Internal  Datatable js -->
 <script src="{{URL::asset('assets/js-rtl/table-data.js')}}"></script>
+@else
+<!--Internal  Datatable js -->
+<script src="{{URL::asset('assets/js/table-data.js')}}"></script>
+@endif
 <script>
     $('#editModal').on('show.bs.modal', function(event){
         var button = $(event.relatedTarget);

@@ -35,7 +35,7 @@ class RoleController extends Controller
         $permissions = array_keys($request->permissions);
         $role->syncPermissions($permissions);
         return redirect()->route('roles.index')
-            ->with('success', 'Role created successfully');
+            ->with('success', __('notifications.success_create_role'));
     }
     public function show($id)
     {
@@ -61,12 +61,12 @@ class RoleController extends Controller
         $selected_permissions = array_keys($request->permissions);
         $role->syncPermissions($selected_permissions);
         return redirect()->route('roles.index')
-            ->with('success', 'Role updated successfully');
+            ->with('success', __('notifications.success_update_role'));
     }
     public function destroy($id)
     {
         DB::table('roles')->where('id', $id)->delete();
         return redirect()->route('roles.index')
-            ->with('success', 'Role deleted successfully');
+            ->with('success', __('notifications.success_delete_role'));
     }
 }

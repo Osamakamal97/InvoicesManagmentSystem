@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title','إنشاء فاتورة')
+@section('title',__('frontend.edit_payment_status'))
 @section('css')
 <!-- Internal Select2 css -->
 <link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
@@ -11,16 +11,23 @@
 <link href="{{URL::asset('assets/plugins/fileuploads/css/fileupload.css')}}" rel="stylesheet" type="text/css" />
 <!---Internal Fancy uploader css-->
 <link href="{{URL::asset('assets/plugins/fancyuploder/fancy_fileupload.css')}}" rel="stylesheet" />
+@if (config('app.locale') == 'ar')
 <!--Internal Sumoselect css-->
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect-rtl.css')}}">
+@else
+<!--Internal Sumoselect css-->
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect.css')}}">
+@endif
 @endsection
 @section('page-header')
 <!-- breadcrumb -->
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto">
         <div class="d-flex">
-            <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                تعديل فاتورة</span>
+            <h4 class="content-title mb-0 my-auto">
+                <a href="{{ route('invoices.index') }}">{{ __('frontend.invoices') }}</a></h4><span
+                class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                {{ __('frontend.edit_payment_status') }}</span>
         </div>
     </div>
 </div>
@@ -32,7 +39,7 @@
     <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
         <div class="card box-shadow-0 ">
             <div class="card-header">
-                <h4 class="card-title mb-1">تعديل فاتورة</h4>
+                <h4 class="card-title mb-1">{{ __('frontend.edit_payment_status') }}</h4>
             </div>
             <div class="card-body pt-0">
                 <form action="{{ route('invoices.updateStatus', $invoice->id) }}" method="POST"
@@ -42,11 +49,11 @@
                     <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                     <div class="row row-sm">
                         <div class="form-group col-lg-4">
-                            <label for="invoiceNumber">رقم الفاتورة </label>
+                            <label for="invoiceNumber">{{__('frontend.invoice_number')}}</label>
                             <input type="text" class="form-control" value="{{ $invoice->invoice_number }}" readonly>
                         </div>
                         <div class="form-group col-lg-4">
-                            <label for="invoiceDate">تاريخ الفاتورة </label>
+                            <label for="invoiceDate">{{ __('frontend.invoice_create_date') }}</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
@@ -57,7 +64,7 @@
                             </div>
                         </div>
                         <div class="form-group col-lg-4">
-                            <label for="dueDate">تاريخ الإستحقاق </label>
+                            <label for="dueDate">{{ __('frontend.due_date') }} </label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
@@ -70,15 +77,15 @@
                     </div>
                     <div class="row row-sm">
                         <div class="form-group col-lg-4">
-                            <label for="sectionId">القسم </label>
+                            <label for="sectionId">{{ __('frontend.section') }} </label>
                             <input type="text" value="{{ $invoice->section->name  }}" class="form-control" readonly>
                         </div>
                         <div class="form-group col-lg-4">
-                            <label for="productId">المنتج </label>
+                            <label for="productId">{{ __('frontend.product') }} </label>
                             <input type="text" value="{{ $invoice->product->name  }}" class="form-control" readonly>
                         </div>
                         <div class="form-group col-lg-4">
-                            <label for="invoiceCollectionAmount">مبلغ التحصيل </label>
+                            <label for="invoiceCollectionAmount">{{ __('frontend.collection_amount') }} </label>
                             <input type="text" class="form-control" id="invoiceCollectionAmount"
                                 value="{{ $invoice->collection_amount  }}"
                                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
@@ -87,7 +94,7 @@
                     </div>
                     <div class="row row-sm">
                         <div class="form-group col-lg-4">
-                            <label for="invoiceCommissionAmount">مبلغ العمولة </label>
+                            <label for="invoiceCommissionAmount">{{ __('frontend.commission_amount') }} </label>
                             <input type="text" class="form-control" id="commission_amount"
                                 value="{{ $invoice->commission_amount  }}" readonly>
                             @error('commission_amount')
@@ -97,44 +104,45 @@
                             @enderror
                         </div>
                         <div class="form-group col-lg-4">
-                            <label for="invoiceDiscount">الخصم </label>
+                            <label for="invoiceDiscount">{{ __('frontend.discount') }} </label>
                             <input type="text" class="form-control " id="discount" value="{{  $invoice->discount }}"
                                 readonly>
                         </div>
                         <div class="form-group col-lg-4">
-                            <label for="rateVat">نسبة ضريبة الفيمة المضافة </label>
+                            <label for="rateVat">{{ __('frontend.rate_VAT') }} </label>
                             <input type="text" value="%{{ $invoice->rate_vat }}" class="form-control" readonly>
                         </div>
                     </div>
                     <div class="row row-sm">
                         <div class="form-group col-lg-6">
-                            <label for="invoiceValueVat">قيمة ضريبة القيمة المضافة</label>
+                            <label for="invoiceValueVat">{{ __('frontend.value_VAT') }}</label>
                             <input type="text" class="form-control" id="value_VAT" value="{{  $invoice->value_vat }}"
                                 readonly>
                         </div>
                         <div class="form-group col-lg-6">
-                            <label for="invoiceTotal">الإجمالي شامل الضريبة</label>
+                            <label for="invoiceTotal">{{ __('frontend.total_with_discount') }}</label>
                             <input type="text" class="form-control " id="total" value="{{ $invoice->total }}" readonly>
                         </div>
                     </div>
                     <div class="row row-sm">
                         <div class="form-group col-lg-12">
-                            <label for="invoiceValueVat">الملاحظات</label>
-                            <textarea class="form-control" placeholder="ملاحظات" readonly
+                            <label for="invoiceValueVat">{{ __('frontend.note') }}</label>
+                            <textarea class="form-control" placeholder="{{ __('frontend.note') }}" readonly
                                 rows="3">{{ $invoice->note }}</textarea>
                         </div>
                     </div>
                     <div class="row row-sm">
                         <div class="form-group col-lg-6">
-                            <label for="status">حالة الدفع<span class="tx-danger">*</span></label>
+                            <label for="status">{{ __('frontend.payment_status') }}<span
+                                    class="tx-danger">*</span></label>
                             <select class="form-control SlectBox" id="status" name="status"
                                 style="width: 100%;color: #4d5875; @error('status') border-color: red @enderror">
-                                {{-- <option label="حالة الدفع" value="33">
-                                    حالة الدفع
-                                </option> --}}
-                                <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>مدفوعة</option>
-                                <option value="2" {{ old('status') == '2' ? 'selected' : '' }}>مدفوعة جزئياً</option>
-                                <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>غير مدفوعة</option>
+                                <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>{{ __('frontend.paid') }}
+                                </option>
+                                <option value="2" {{ old('status') == '2' ? 'selected' : '' }}>
+                                    {{ __('frontend.part_paid') }}</option>
+                                <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>
+                                    {{ __('frontend.unpaid') }}</option>
                             </select>
                             @error('status')
                             <ul class="parsley-errors-list filled" id="parsley-id-5">
@@ -143,7 +151,8 @@
                             @enderror
                         </div>
                         <div class="form-group col-lg-6">
-                            <label for="paymentDate">تاريخ الدفع <span class="tx-danger">*</span></label>
+                            <label for="paymentDate">{{ __('frontend.payment_date') }} <span
+                                    class="tx-danger">*</span></label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
@@ -161,7 +170,7 @@
                             @enderror
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary mt-3 mb-0">تعديل</button>
+                    <button type="submit" class="btn btn-primary mt-3 mb-0">{{ __('frontend.edit') }}</button>
                 </form>
             </div>
         </div>
@@ -210,7 +219,7 @@
     let date = new Date();
     let selectedDate = (date.getMonth()+1) + '/' + date.getDate() +'/' +date.getFullYear();
     if(selectedDate == oldPaymentDate || oldPaymentDate == '')
-        $("#paymentDate").datepicker().datepicker("setDate", new Date());   
+        $("#paymentDate").datepicker().datepicker("setDate", new Date());
     else
         $("#paymentDate").datepicker().datepicker("setDate", oldPaymentDate);
 </script>

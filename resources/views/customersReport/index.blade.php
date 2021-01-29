@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title','التقارير')
+@section('title',__('frontend.customers_reports'))
 @section('css')
 <!-- Internal Select2 css -->
 <link href="{{URL::asset('assets/plugins/select2/css/select2.min.css')}}" rel="stylesheet">
@@ -9,8 +9,13 @@
 <link href="{{URL::asset('assets/plugins/datatable/css/responsive.bootstrap4.min.css')}}" rel="stylesheet" />
 <link href="{{URL::asset('assets/plugins/datatable/css/jquery.dataTables.min.css')}}" rel="stylesheet">
 <link href="{{URL::asset('assets/plugins/datatable/css/responsive.dataTables.min.css')}}" rel="stylesheet">
+@if (config('app.locale') == 'ar')
 <!--Internal Sumoselect css-->
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect-rtl.css')}}">
+@else
+<!--Internal Sumoselect css-->
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect.css')}}">
+@endif
 <!---Internal  Prism css-->
 <link href="{{URL::asset('assets/plugins/prism/prism.css')}}" rel="stylesheet">
 <!--- Custom-scroll -->
@@ -21,8 +26,9 @@
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto">
         <div class="d-flex">
-            <h4 class="content-title mb-0 my-auto">التقارير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                تقارير العملاء</span>
+            <h4 class="content-title mb-0 my-auto">{{ __('frontend.reports') }}</h4><span
+                class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                {{ __('frontend.customers_reports') }}</span>
         </div>
     </div>
 </div>
@@ -35,19 +41,19 @@
     <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
         <div class="card box-shadow-0 ">
             <div class="card-header">
-                <h4 class="card-title mb-1">بيانات البحث لإستخراج فاتورة</h4>
+                <h4 class="card-title mb-1">{{ __('frontend.search_information_to_get_invoices') }}</h4>
             </div>
             <div class="card-body pt-0">
                 <form action="{{ route('customersReport.search') }}" method="POST">
                     @csrf
                     <div class="row row-sm">
                         <div class="form-group col-lg-3">
-                            <label for="sectionId">القسم <span class="tx-danger">*</span></label>
+                            <label for="sectionId">{{ __('frontend.section') }} <span class="tx-danger">*</span></label>
                             <select class="form-control SlectBox" name="section_id" id="sectionId"
-                                placeholder="إختر قسم"
+                                placeholder="{{ __('frontend.choose_section') }}"
                                 style="width: 100%;color: #4d5875; @error('section_id') border-color: red @enderror">
                                 <option label="0" value="0">
-                                    إختر قسم
+                                    {{ __('frontend.choose_section') }}
                                 </option>
                                 @foreach ($sections as $key => $section)
                                 <option value="{{ $section->id }}" class="selected_section"
@@ -63,9 +69,9 @@
                             @enderror
                         </div>
                         <div class="form-group col-lg-3">
-                            <label for="productId">المنتج <span class="tx-danger">*</span></label>
+                            <label for="productId">{{ __('frontend.product') }} <span class="tx-danger">*</span></label>
                             <select class="form-control SlectBox products" name="product_id" id="productId"
-                                placeholder="إختر منتج"
+                                placeholder="{{ __('frontend.choose_product') }}"
                                 style="width: 100%;color: #222631; @error('product_id') border-color: red @enderror">
                             </select>
                             @error('product_id')
@@ -75,7 +81,7 @@
                             @enderror
                         </div>
                         <div class="form-group col-lg-6">
-                            <label for="name">حدود التاريخ</label>
+                            <label for="name">{{ __('frontend.date_range') }}</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                     <div class="input-group-text">
@@ -88,7 +94,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="submit" class="btn btn-primary mt-3 mb-0">بحث</button>
+                    <button type="submit" class="btn btn-primary mt-3 mb-0">{{ __('frontend.search') }}</button>
                 </form>
             </div>
         </div>
@@ -106,14 +112,14 @@
                     <table class="table key-buttons text-md-nowrap" id="example">
                         <thead>
                             <tr>
-                                <th class="border-bottom-0">#</th>
-                                <th class="border-bottom-0">رقم الفاتورة</th>
-                                <th class="border-bottom-0">تاريخ الفاتورة</th>
-                                <th class="border-bottom-0">تاريخ الاستحقاق</th>
-                                <th class="border-bottom-0">المنتج</th>
-                                <th class="border-bottom-0">القسم</th>
-                                <th class="border-bottom-0">الرصيد الكلي</th>
-                                <th class="border-bottom-0">الحالة</th>
+                                <th class="wd-5p border-bottom-0">#</th>
+                                <th class="wd-12p border-bottom-0">{{ __('frontend.invoice_number') }}</th>
+                                <th class="wd-12p border-bottom-0">{{ __('frontend.invoice_create_date') }}</th>
+                                <th class="wd-12p border-bottom-0">{{ __('frontend.due_date') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.product') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.section') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.total_balance') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.status') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -129,19 +135,19 @@
                                 <td class="text-center">
                                     @if ($invoice->status == 0)
                                     <span class="label text-danger d-flex">
-                                        <div class="dot-label bg-danger ml-1"></div>{{ $invoice->getStatus() }}
+                                        {{ $invoice->getStatus() }}
                                     </span>
                                     @elseif($invoice->status == 1)
                                     <span class="label text-success d-flex">
-                                        <div class="dot-label bg-success ml-1"></div>{{ $invoice->getStatus() }}
+                                        {{ $invoice->getStatus() }}
                                     </span>
                                     @elseif($invoice->status == 2)
                                     <span class="label text-warning d-flex">
-                                        <div class="dot-label bg-warning ml-1"></div>{{ $invoice->getStatus() }}
+                                        {{ $invoice->getStatus() }}
                                     </span>
                                     @else
                                     <span class="label text-muted d-flex">
-                                        <div class="dot-label bg-gray-300 ml-1"></div>{{ $invoice->getStatus() }}
+                                        {{ $invoice->getStatus() }}
                                     </span>
                                     @endif
                                 </td>
@@ -157,7 +163,7 @@
     <div class="col-xl-12">
         <div class="card">
             <div class="card-header pb-0">
-                <h3>لا يوجد بيانات بخصوص هذا البحث</h3>
+                <h3>{{ __('frontend.no_search_results') }} }}</h3>
             </div>
         </div>
     </div>
@@ -190,9 +196,6 @@
 <script src="{{URL::asset('assets/plugins/datatable/js/dataTables.responsive.min.js')}}"></script>
 <script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
 <script src="{{URL::asset('assets/js/table-data.js')}}"></script>
-<!-- Internal Modal js-->
-<script src="{{URL::asset('assets/js/modal.js')}}"></script>
-
 {{-- for select2 from form-elements --}}
 <!--Internal  Datepicker js -->
 <script src="{{URL::asset('assets/plugins/jquery-ui/ui/widgets/datepicker.js')}}"></script>
@@ -214,9 +217,6 @@
 <script src="{{URL::asset('assets/js/form-elements.js')}}"></script>
 <!--Internal Sumoselect js-->
 <script src="{{URL::asset('assets/plugins/sumoselect/jquery.sumoselect.js')}}"></script>
-<!--Internal  Clipboard js-->
-<script src="{{URL::asset('assets/plugins/clipboard/clipboard.min.js')}}"></script>
-<script src="{{URL::asset('assets/plugins/clipboard/clipboard.js')}}"></script>
 <!-- Internal Prism js-->
 <script src="{{URL::asset('assets/plugins/prism/prism.js')}}"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -234,7 +234,7 @@
                 },
                 autoApply:true
             });
-            
+
             $('input[name="date_range"]').on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
             });
@@ -276,7 +276,7 @@
                 }
             });
     });
-    window.onload = function () {   
+    window.onload = function () {
         const oldSectionId = "{{ $oldInputs['section_id'] }}";
         const oldProductId = "{{  $oldInputs['product_id'] }}";
         if(oldSectionId != null){

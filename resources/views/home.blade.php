@@ -11,11 +11,11 @@
 <div class="breadcrumb-header justify-content-between">
     <div class="left-content">
         <div>
-            <h2 class="main-content-title tx-24 mg-b-1 mg-b-lg-1">Hi, welcome back!</h2>
-            <p class="mg-b-0">Sales monitoring dashboard template.</p>
+            <h2 class="main-content-title tx-24 mg-b-1 mg-b-lg-1">{{ __('frontend.hi_home_page') }}</h2>
+            <p class="mg-b-0">{{ __('frontend.invoices_management_system') }}</p>
         </div>
     </div>
-    <div class="main-dashboard-header-right">
+    {{-- <div class="main-dashboard-header-right">
         <div>
             <label class="tx-13">Customer Ratings</label>
             <div class="main-star">
@@ -32,7 +32,7 @@
             <label class="tx-13">Offline Sales</label>
             <h5>783,675</h5>
         </div>
-    </div>
+    </div> --}}
 </div>
 <!-- /breadcrumb -->
 @endsection
@@ -43,16 +43,18 @@
         <div class="card overflow-hidden sales-card bg-primary-gradient">
             <div class="pl-3 pt-3 pr-3 pb-2 pt-0">
                 <div class="">
-                    <h6 class="mb-3 tx-12 text-white">إجمالي الفواتير</h6>
+                    <h6 class="mb-3 tx-12 text-white">{{ __('frontend.total_invoices') }}</h6>
                 </div>
                 <div class="pb-0 mt-0">
                     <div class="d-flex">
                         <div class="">
                             <h4 class="tx-20 font-weight-bold mb-1 text-white">${{ totalInvoices() }}</h4>
-                            <p class="mb-0 tx-12 text-white op-7">بعدد فواتير {{ App\Models\Invoice::count() }} فواتير
+                            <p class="mb-0 tx-12 text-white op-7">{{ __('frontend.in') }}
+                                {{ App\Models\Invoice::count() }}
+                                {{ __('frontend.invoice') }}
                             </p>
                         </div>
-                        <span class="float-right my-auto mr-auto">
+                        <span class="main-box-statistics-percentage float-right info-show-nice ">
                             <i class="fas fa-arrow-circle-up text-white"></i>
                             <span class="text-white op-7">100%</span>
                         </span>
@@ -66,15 +68,17 @@
         <div class="card overflow-hidden sales-card bg-success-gradient">
             <div class="pl-3 pt-3 pr-3 pb-2 pt-0">
                 <div class="">
-                    <h6 class="mb-3 tx-12 text-white">الفواتير المدفوعة</h6>
+                    <h6 class="mb-3 tx-12 text-white">{{ __('frontend.paid_invoices') }}</h6>
                 </div>
                 <div class="pb-0 mt-0">
                     <div class="d-flex">
                         <div class="">
                             <h4 class="tx-20 font-weight-bold mb-1 text-white">${{ totalInvoicesByStatus(1) }}</h4>
-                            <p class="mb-0 tx-12 text-white op-7">بعدد {{ invoiceCountByStatus(1) }} فاتورة</p>
+                            <p class="mb-0 tx-12 text-white op-7">{{ __('frontend.in') }}
+                                {{ invoiceCountByStatus(1) }}
+                                {{ __('frontend.invoice') }}</p>
                         </div>
-                        <span class="float-right my-auto mr-auto">
+                        <span class="float-right info-show-nice">
                             <i class="fas fa-arrow-circle-up text-white"></i>
                             <span class="text-white op-7"> {{ totalInvoicesPercentageByStatus(1) }}%</span>
                         </span>
@@ -88,15 +92,17 @@
         <div class="card overflow-hidden sales-card bg-warning-gradient">
             <div class="pl-3 pt-3 pr-3 pb-2 pt-0">
                 <div class="">
-                    <h6 class="mb-3 tx-12 text-white">الفواتير المدفوعة جزئياً</h6>
+                    <h6 class="mb-3 tx-12 text-white">{{ __('frontend.part_paid_invoices') }}</h6>
                 </div>
                 <div class="pb-0 mt-0">
                     <div class="d-flex">
                         <div class="">
                             <h4 class="tx-20 font-weight-bold mb-1 text-white">${{ totalInvoicesByStatus(2) }}</h4>
-                            <p class="mb-0 tx-12 text-white op-7">بعدد {{ invoiceCountByStatus(2) }} فاتورة</p>
+                            <p class="mb-0 tx-12 text-white op-7">{{ __('frontend.in') }}
+                                {{ invoiceCountByStatus(2) }}
+                                {{ __('frontend.invoice') }}</p>
                         </div>
-                        <span class="float-right my-auto mr-auto">
+                        <span class="float-right info-show-nice">
                             <i class="fas fa-arrow-circle-down text-white"></i>
                             <span class="text-white op-7"> {{totalInvoicesPercentageByStatus(2)}}</span>
                         </span>
@@ -110,15 +116,17 @@
         <div class="card overflow-hidden sales-card bg-danger-gradient">
             <div class="pl-3 pt-3 pr-3 pb-2 pt-0">
                 <div class="">
-                    <h6 class="mb-3 tx-12 text-white">الفواتير الغير مدفوعة</h6>
+                    <h6 class="mb-3 tx-12 text-white">{{ __('frontend.unpaid_invoices') }}</h6>
                 </div>
                 <div class="pb-0 mt-0">
                     <div class="d-flex">
                         <div class="">
                             <h4 class="tx-20 font-weight-bold mb-1 text-white">${{ totalInvoicesByStatus(0) }}</h4>
-                            <p class="mb-0 tx-12 text-white op-7">بعدد {{ invoiceCountByStatus(0) }} فاتورة</p>
+                            <p class="mb-0 tx-12 text-white op-7">{{ __('frontend.in') }}
+                                {{ invoiceCountByStatus(0) }}
+                                {{ __('frontend.invoice') }}</p>
                         </div>
-                        <span class="float-right my-auto mr-auto">
+                        <span class="float-right info-show-nice">
                             <i class="fas fa-arrow-circle-down text-white"></i>
                             <span class="text-white op-7"> {{ totalInvoicesPercentageByStatus(0) }}%</span>
                         </span>
@@ -139,7 +147,7 @@
         <div class="card">
             <div class="card-header bg-transparent pd-b-0 pd-t-20 bd-b-0">
                 <div class="d-flex justify-content-between">
-                    <h4 class="card-title mb-0">Order status</h4>
+                    <h4 class="card-title mb-0">{{ __('frontend.bar_invoices_statistics') }}</h4>
                 </div>
             </div>
             {{-- {!! $chartjs->render() !!} --}}
@@ -148,7 +156,7 @@
     </div>
     <div class="col-lg-12 col-xl-5">
         <div class="card card-dashboard-map-one">
-            <label class="main-content-label">Sales Revenue by Customers in USA</label>
+            <label class="main-content-label">{{ __('frontend.pie_invoices_statistics') }}</label>
             {!! $pieChartjs->render() !!}
         </div>
     </div>

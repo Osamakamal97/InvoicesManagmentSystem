@@ -1,5 +1,5 @@
 @extends('layouts.master')
-@section('title','الفواتير')
+@section('title', __('frontend.invoices'))
 @section('css')
 <!-- Internal Data table css -->
 <link href="{{URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" />
@@ -16,12 +16,17 @@
 <link href="{{URL::asset('assets/plugins/fileuploads/css/fileupload.css')}}" rel="stylesheet" type="text/css" />
 <!---Internal Fancy uploader css-->
 <link href="{{URL::asset('assets/plugins/fancyuploder/fancy_fileupload.css')}}" rel="stylesheet" />
+{{-- @if (config('app.locale') == 'ar')
 <!--Internal Sumoselect css-->
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect-rtl.css')}}">
 <!--Internal  TelephoneInput css-->
 <link rel="stylesheet" href="{{URL::asset('assets/plugins/telephoneinput/telephoneinput-rtl.css')}}">
+@else
 <!--Internal Sumoselect css-->
-<link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect-rtl.css')}}">
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/sumoselect/sumoselect.css')}}">
+<!--Internal  TelephoneInput css-->
+<link rel="stylesheet" href="{{URL::asset('assets/plugins/telephoneinput/telephoneinput.css')}}">
+@endif --}}
 <!---Internal  Prism css-->
 <link href="{{URL::asset('assets/plugins/prism/prism.css')}}" rel="stylesheet">
 <!--- Custom-scroll -->
@@ -32,8 +37,10 @@
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto">
         <div class="d-flex">
-            <h4 class="content-title mb-0 my-auto">الفواتير</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                قائمة الفواتير</span>
+            <h4 class="content-title mb-0 my-auto">
+                <a href="{{ route('invoices.index') }}">{{ __('frontend.invoices') }}</a></h4><span
+                class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                {{ __('frontend.'.$page_type.'_list') }}</span>
         </div>
     </div>
 </div>
@@ -47,21 +54,21 @@
         <div class="card">
             <div class="card-header pb-0">
                 <div class="d-flex justify-content-between">
-                    <h4 class="card-title mg-b-0">الفواتير</h4>
+                    <h4 class="card-title mg-b-0">{{ __('frontend.invoices') }}</h4>
                     <i class="mdi mdi-dots-horizontal text-gray"></i>
                 </div>
                 <div class="row">
                     @can('create_invoice')
-                    <div class="col-sm-6 col-md-4 col-xl-2 mg-t-20">
-                        <a class="btn btn-outline-primary btn-block" href="{{ route('invoices.create') }}">إنشاء فاتورة
-                            جديد</a>
+                    <div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
+                        <a class="btn btn-outline-primary btn-block"
+                            href="{{ route('invoices.create') }}">{{__('frontend.create_new_invoice')}}</a>
                     </div>
                     @endcan
-                    @can('export_invoice')
-                    <div class="col-sm-6 col-md-4 col-xl-2 mg-t-20">
+                    @can('export_invoices_excel')
+                    <div class="col-sm-6 col-md-4 col-xl-3 mg-t-20">
                         <a class="btn btn-outline-primary btn-block" href="{{ route('invoices.export') }}"
                             target="_blank">
-                            تصدير البيانات</a>
+                            {{ __('frontend.export_invoices_excel') }}</a>
                     </div>
                     @endcan
                 </div>
@@ -72,14 +79,14 @@
                         <thead>
                             <tr>
                                 <th class="wd-5p border-bottom-0">#</th>
-                                <th class="wd-12p border-bottom-0">رقم الفاتورة</th>
-                                <th class="wd-12p border-bottom-0">تاريخ الفاتورة</th>
-                                <th class="wd-12p border-bottom-0">تاريخ الاستحقاق</th>
-                                <th class="wd-10p border-bottom-0">المنتج</th>
-                                <th class="wd-10p border-bottom-0">القسم</th>
-                                <th class="wd-10p border-bottom-0">الرصيد الكلي</th>
-                                <th class="wd-10p border-bottom-0">الحالة</th>
-                                <th class="border-bottom-0">العمليات</th>
+                                <th class="wd-12p border-bottom-0">{{ __('frontend.invoice_number') }}</th>
+                                <th class="wd-12p border-bottom-0">{{ __('frontend.invoice_create_date') }}</th>
+                                <th class="wd-12p border-bottom-0">{{ __('frontend.due_date') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.product') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.section') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.total_balance') }}</th>
+                                <th class="wd-10p border-bottom-0">{{ __('frontend.status') }}</th>
+                                <th class="border-bottom-0">{{ __('frontend.operations') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -109,27 +116,27 @@
                                 <td class="text-center">
                                     @if ($invoice->status == 0)
                                     <span class="label text-danger d-flex">
-                                        <div class="dot-label bg-danger ml-1"></div>{{ $invoice->getStatus() }}
+                                        {{ $invoice->getStatus() }}
                                     </span>
                                     @elseif($invoice->status == 1)
                                     <span class="label text-success d-flex">
-                                        <div class="dot-label bg-success ml-1"></div>{{ $invoice->getStatus() }}
+                                        {{ $invoice->getStatus() }}
                                     </span>
                                     @elseif($invoice->status == 2)
                                     <span class="label text-warning d-flex">
-                                        <div class="dot-label bg-warning ml-1"></div>{{ $invoice->getStatus() }}
+                                        {{ $invoice->getStatus() }}
                                     </span>
                                     @else
                                     <span class="label text-muted d-flex">
-                                        <div class="dot-label bg-gray-300 ml-1"></div>{{ $invoice->getStatus() }}
+                                        {{ $invoice->getStatus() }}
                                     </span>
                                     @endif
                                 </td>
-                                <td class="btn-icon-list ">
+                                <td class="btn-icon-list">
                                     @if ($is_archive)
                                     @can('unarchive_invoice')
-
-                                    <span data-toggle="tooltip" data-placement="top" title="إلغاء أرشفة الفاتورة"
+                                    <span data-toggle="tooltip" data-placement="top"
+                                        title="{{ __('frontend.cancel_archive_invoices') }}"
                                         style="margin-left: 5px;margin-right: 5px">
                                         <a href="#unarchiveModal" class="btn btn-info btn-sm btn-icon"
                                             data-effect="effect-flip-horizontal" data-toggle="modal"
@@ -138,7 +145,8 @@
                                     </span>
                                     @endcan
                                     @can('delete_invoice')
-                                    <span data-toggle="tooltip" data-placement="top" title="حذف الفاتورة نهائياً">
+                                    <span data-toggle="tooltip" data-placement="top"
+                                        title="{{ __('frontend.delete_invoice_completely') }}">
                                         <a href="#deleteModal" class="btn btn-danger btn-sm btn-icon"
                                             data-effect="effect-flip-horizontal" data-toggle="modal"
                                             data-id="{{ $invoice->id }}" data-name="{{ $invoice->invoice_number }}">
@@ -148,18 +156,20 @@
                                     @else
                                     @can('edit_invoice_payment_status')
                                     <a href="{{ route('invoices.editStatus' ,$invoice->id) }}"
-                                        class="btn btn-primary btn-sm btn-icon" title="تعديل حالة الدفع"
-                                        data-toggle="tooltip" data-placement="top">
+                                        class="btn btn-primary btn-sm btn-icon"
+                                        title="{{ __('frontend.edit_payment_status') }}" data-toggle="tooltip"
+                                        data-placement="top">
                                         <i class="las la-file-invoice-dollar"></i></a>
                                     @endcan
                                     @can('edit_invoice')
                                     <a href="{{ route('invoices.edit' ,$invoice->id) }}" data-toggle="tooltip"
-                                        data-placement="top" title="تعديل الفاتورة"
+                                        data-placement="top" title="{{ __('frontend.edit_invoice') }}"
                                         class="btn btn-warning btn-sm btn-icon">
                                         <i class="typcn typcn-edit"></i></a>
                                     @endcan
                                     @can('archive_invoice')
-                                    <span data-toggle="tooltip" data-placement="top" title="أرشفة الفاتورة"
+                                    <span data-toggle="tooltip" data-placement="top"
+                                        title="{{ __('frontend.archive_invoice') }}"
                                         style="margin-left: 5px;margin-right: 5px">
                                         <a href="#archiveModal" class="btn btn-info btn-sm btn-icon"
                                             data-effect="effect-flip-horizontal" data-toggle="modal"
@@ -170,8 +180,8 @@
                                     @can('print_invoice')
                                     <a href="{{ route('invoices.print',$invoice->id) }}"
                                         class="btn btn-light btn-sm btn-icon" data-effect="effect-flip-horizontal"
-                                        data-toggle="tooltip" data-placement="top" title="طباعة الفاتورة"
-                                        style="margin-left: 5px;margin-right: 5px" data-id="{{ $invoice->id }}">
+                                        data-toggle="tooltip" data-placement="top"
+                                        title="{{ __('frontend.print_invoice') }}" data-id="{{ $invoice->id }}">
                                         <i class="las la-print"></i></a>
                                     @endcan
                                     @endif
@@ -190,14 +200,12 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-content-demo">
                 <div class="modal-header">
-                    <h6 class="modal-title">
-                        أرشفة الفاتورة
-                    </h6>
+                    <h6 class="modal-title">{{ __('frontend.archive_invoice') }}</h6>
                     <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
                             aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mg-b-20 mg-x-20"> هل أنت متأكد من أرشفة الفاتورة صاحبة الرقم <span
+                    <p class="mg-b-20 mg-x-20"> {{ __('frontend.are_you_sure_archive_this_invoice') }} <span
                             id="invoice_number_archive" style="font-weight: bold"></span> ؟</p>
                     <form class="form-horizontal" action="{{ route('invoices.archive', 0) }}" id="submit-archive-data"
                         method="POST">
@@ -206,8 +214,9 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn ripple btn-success" type="submit"
-                        onclick="event.preventDefault();document.getElementById('submit-archive-data').submit()">أرشفة</button>
-                    <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">إلغاء</button>
+                        onclick="event.preventDefault();document.getElementById('submit-archive-data').submit()">{{ __('frontend.archive') }}</button>
+                    <button class="btn ripple btn-secondary" data-dismiss="modal"
+                        type="button">{{ __('frontend.cancel') }}</button>
                 </div>
             </div>
         </div>
@@ -217,13 +226,13 @@
             <div class="modal-content modal-content-demo">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        إلغاء أرشفة الفاتورة
+                        {{ __('frontend.cancel_archive_invoices') }}
                     </h6>
                     <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
                             aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mg-b-20 mg-x-20"> هل أنت متأكد من إلغاء أرشفة الفاتورة صاحبة الرقم <span
+                    <p class="mg-b-20 mg-x-20"> {{ __('frontend.are_you_sure_cancel_archive_this_invoice') }} <span
                             id="invoice_number_unarchive" style="font-weight: bold"></span> ؟</p>
                     <form class="form-horizontal" action="{{ route('invoices.unarchive', 0) }}"
                         id="submit-unarchive-data" method="POST">
@@ -233,9 +242,11 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn ripple btn-success" type="submit"
-                        onclick="event.preventDefault();document.getElementById('submit-unarchive-data').submit()">عدم
-                        الأرشفة</button>
-                    <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">إلغاء</button>
+                        onclick="event.preventDefault();document.getElementById('submit-unarchive-data').submit()">
+                        {{ __('frontend.cancel_archive') }}
+                    </button>
+                    <button class="btn ripple btn-secondary" data-dismiss="modal"
+                        type="button">{{ __('frontend.cancel') }}</button>
                 </div>
             </div>
         </div>
@@ -245,13 +256,13 @@
             <div class="modal-content modal-content-demo">
                 <div class="modal-header">
                     <h6 class="modal-title">
-                        حذف الفاتورة
+                        {{ __('frontend.delete_invoice_completely') }}
                     </h6>
                     <button aria-label="Close" class="close" data-dismiss="modal" type="button"><span
                             aria-hidden="true">&times;</span></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mg-b-20 mg-x-20"> هل أنت متأكد من حذف الفاتورة صاحبة الرقم <span
+                    <p class="mg-b-20 mg-x-20"> {{ __('frontend.sure_delete_invoice') }} <span
                             id="invoice_number_delete" style="font-weight: bold"></span> ؟</p>
                     <form class="form-horizontal" action="{{ route('invoices.destroy', 0) }}" id="submit-delete-data"
                         method="POST">
@@ -261,8 +272,9 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn ripple btn-danger" type="submit"
-                        onclick="event.preventDefault();document.getElementById('submit-delete-data').submit()">حذف</button>
-                    <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">إلغاء</button>
+                        onclick="event.preventDefault();document.getElementById('submit-delete-data').submit()">{{ __('frontend.delete') }}</button>
+                    <button class="btn ripple btn-secondary" data-dismiss="modal"
+                        type="button">{{ __('frontend.cancel') }}</button>
                 </div>
             </div>
         </div>
@@ -295,8 +307,13 @@
 <script src="{{URL::asset('assets/plugins/datatable/js/responsive.bootstrap4.min.js')}}"></script>
 <!-- Internal Modal js-->
 <script src="{{URL::asset('assets/js/modal.js')}}"></script>
+@if (config('app.locale') == 'ar')
 <!--Internal  Datatable js -->
 <script src="{{URL::asset('assets/js-rtl/table-data.js')}}"></script>
+@else
+<!--Internal  Datatable js -->
+<script src="{{URL::asset('assets/js/table-data.js')}}"></script>
+@endif
 {{-- for select2 from form-elements --}}
 <!--Internal  Datepicker js -->
 <script src="{{URL::asset('assets/plugins/jquery-ui/ui/widgets/datepicker.js')}}"></script>

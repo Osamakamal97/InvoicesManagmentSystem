@@ -1,0 +1,31 @@
+<?php
+
+return [
+    'success_upload_attachments' => 'Attachments upload successfully.',
+    'error_show_attachments' => 'Error happen while show attachments.',
+    'success_delete_attachment' => 'Attachment deleted successfully.',
+    'error_get_invoices' => 'Error happen while get invoices.',
+    'error_get_archive_invoices' => 'Error happen while get archive\'s invoices.',
+    'success_archive_invoice' => 'Invoice archive successfully.',
+    'success_unarchive_invoice' => 'Invoice unarchive successfully.',
+    'error_open_create_invoice' => 'Error happen while open create invoice page.',
+    'success_create_invoice' => 'Invoice created successfully.',
+    'success_update_invoice' => 'Invoice updated successfully.',
+    'success_edit_invoice_payment_status' => 'Invoice payment status update successfully.',
+    'success_delete_invoice' => 'Invoice deleted successfully.',
+    'success_create_product' => 'Product created successfully.',
+    'success_update_product' => 'Product updated successfully.',
+    'success_delete_product' => 'Product deleted successfully.',
+    'success_create_section' => 'Section created successfully.',
+    'success_update_section' => 'Section updated successfully.',
+    'success_delete_section' => 'Section deleted successfully.',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+    '' => '',
+
+];

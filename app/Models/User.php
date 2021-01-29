@@ -22,7 +22,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        // 'roles',
         'status'
     ];
 
@@ -50,7 +49,7 @@ class User extends Authenticatable
 
     public function getStatus()
     {
-        return $this->status == 0 ? 'معطل' : 'مفعل';
+        return $this->status == 0 ? __('frontend.disable') : __('frontend.enable');
     }
 
     public function setPasswordAttribute($password)

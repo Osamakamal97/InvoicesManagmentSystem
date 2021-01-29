@@ -39,16 +39,16 @@ class Invoice extends Main
         $status = '';
         switch ($this->status) {
             case 0:
-                $status = 'غير مدفوعة';
+                $status = __('frontend.unpaid');
                 break;
             case 1:
-                $status = 'مدفوعة';
+                $status = __('frontend.paid');
                 break;
             case 2:
-                $status = 'مدفوعة جزئياً';
+                $status = __('frontend.part_paid');
                 break;
             default:
-                $status = 'غير مُعرَّفة';
+                $status = __('frontend.unknown');
                 break;
         }
         return $status;

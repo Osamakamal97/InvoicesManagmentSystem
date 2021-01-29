@@ -37,7 +37,7 @@ class UserController extends Controller
         $user = User::create($request->validated());
         $user->assignRole($request->input('roles'));
         return redirect()->route('users.index')
-            ->with('success', 'تم إنشاء المستخدم بنجاح');
+            ->with('success', __('notifications.success_create_product'));
     }
 
     public function show($id)
@@ -62,13 +62,13 @@ class UserController extends Controller
         DB::table('model_has_roles')->where('model_id', $user->id)->delete();
         $user->assignRole($request->input('roles'));
         return redirect()->route('users.index')
-            ->with('success', 'تم تحديث المستخدم بنجاح.');
+            ->with('success', __('notifications.success_update_user'));
     }
 
     public function destroy(User $user)
     {
         $user->delete();
         return redirect()->route('users.index')
-            ->with('success', 'تم حذف المستخدم بنجاح.');
+            ->with('success', __('notifications.success_delete_user'));
     }
 }

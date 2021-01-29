@@ -1,4 +1,5 @@
 @extends('layouts.master')
+@section('title',__('frontend.show_role_and_permissions'))
 @section('css')
 @endsection
 @section('page-header')
@@ -6,8 +7,9 @@
 <div class="breadcrumb-header justify-content-between">
     <div class="my-auto">
         <div class="d-flex">
-            <h4 class="content-title mb-0 my-auto">المستخدمين</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
-                عرض الصلاحيات</span>
+            <h4 class="content-title mb-0 my-auto"><a href="{{ route('roles.index') }}">{{ __('frontend.users') }}</a>
+            </h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/
+                {{ __('frontend.show_role_and_permissions') }}</span>
         </div>
     </div>
 </div>
@@ -23,11 +25,11 @@
             <div class="card-body pt-0">
                 <div class="row row-sm">
                     <div class="form-group col-lg-12">
-                        <h4>اسم الدور: {{ $role->name }}</h4>
+                        <h4>{{ __('frontend.role_name') }}: {{ $role->name }}</h4>
                     </div>
                 </div>
                 <div class="col-md-12 col-xl-12 col-xs-12 col-sm-12">
-                    <h4>الصلاحيات: </h4><br>
+                    <h4>{{ __('frontend.permissions') }}: </h4><br>
                     <div class="row">
                         @foreach ($rolePermissions as $permission)
                         <div class="col-lg-3 mg-t-15" style="font-size: 16px">

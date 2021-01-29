@@ -4,16 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\InvoiceReportSearchRequest;
 use App\Models\Invoice;
-use App\Models\User;
-use App\Notifications\CreateInvoice;
 use Carbon\Carbon;
 
 class InvoicesReportController extends Controller
 {
     public function index()
     {
-        $user = User::first();
-        $user->notify(new CreateInvoice(Invoice::first()));
         // !This is add because there is a problem happen in view that can't catch it using isset
         $oldInputs['date_range'] = '';
         return view('invoicesReport.index', compact('oldInputs'));
@@ -22,7 +18,7 @@ class InvoicesReportController extends Controller
     /**
      * This use to search about invoice number OR invoice status that we have there
      * of them and with that you can add range of date that make search between
-     * them after that return results to index with or without data then 
+     * them after that return results to index with or without data then
      * make a report using something
      */
     public function search(InvoiceReportSearchRequest $request)
