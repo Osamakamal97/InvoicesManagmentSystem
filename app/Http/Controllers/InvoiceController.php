@@ -252,7 +252,7 @@ class InvoiceController extends Controller
     public function editStatus(Invoice $invoice, Request $request)
     {
         // return $request;
-        return view('invoices.editStatus', compact('invoice'));
+        return view('invoices.edit_status', compact('invoice'));
     }
 
     public function updateStatus(UpdateInvoiceStatusRequest $request, Invoice $invoice)
@@ -282,5 +282,11 @@ class InvoiceController extends Controller
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'error');
         }
+    }
+
+    public function createMultiProduct()
+    {
+        $sections = Section::all();
+        return view('invoices.multiProductCreate', compact('sections'));
     }
 }

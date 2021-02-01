@@ -18,11 +18,7 @@ class SampleChart extends BaseChart
      */
     public function handler(Request $request): Chartisan
     {
-        // return Chartisan::build()
-        //     ->labels(['First', 'Second', 'Third'])
-        //     ->dataset('Sample', [18, 5, 90]);
-
-        $invoices = Invoice::count();
+        // Homepage bar chart
         $paid_invoices = Invoice::whereStatus(1)->count();
         $part_paid_invoices = Invoice::whereStatus(2)->count();
         $unpaid_invoices = Invoice::whereStatus(0)->count();

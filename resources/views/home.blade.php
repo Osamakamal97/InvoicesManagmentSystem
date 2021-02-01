@@ -157,7 +157,7 @@
     <div class="col-lg-12 col-xl-5">
         <div class="card card-dashboard-map-one">
             <label class="main-content-label">{{ __('frontend.pie_invoices_statistics') }}</label>
-            {!! $pieChartjs->render() !!}
+            {!! $pieChart->render() !!}
         </div>
     </div>
 </div>

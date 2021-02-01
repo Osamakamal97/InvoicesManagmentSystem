@@ -11,6 +11,7 @@ class AdminController extends Controller
      */
     public function index($id)
     {
+        // Add by dashboard template
         if (view()->exists($id)) {
             return view($id);
         } else {

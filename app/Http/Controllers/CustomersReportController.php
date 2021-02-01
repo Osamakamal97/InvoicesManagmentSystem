@@ -10,27 +10,20 @@ use Carbon\Carbon;
 class CustomersReportController extends Controller
 {
 
-    private $sections;
-
-    public function __construct()
-    {
-        $sections = Section::all();
-        $this->sections = $sections;
-    }
-
     public function index()
     {
         $oldInputs['date_range'] = '';
         $oldInputs['section_id'] = '';
         $oldInputs['product_id'] = '';
-        $sections = $this->sections;
+        $sections = Section::all();
         return view('customersReport.index', compact(['oldInputs', 'sections']));
     }
 
     public function search(CustomersReportSearchRequest $request)
     {
-        // with date trange
+        // with date range
         if ($request->date_range != null) {
+            // Separate two dates then format it with the way that datebase can understand
             $dates = explode('-', $request->date_range);
             $from_date = Carbon::parse($dates[0])->format('Y-m-d');
             $to_date = Carbon::parse($dates[1])->format('Y-m-d');
@@ -58,6 +51,7 @@ class CustomersReportController extends Controller
                 $invoices = Invoice::whereSectionId($request->section_id)
                     ->whereProductId($request->product_id)->get();
         }
+        // Get all inputs to return it to a page as old inputs.
         $oldInputs = $request->all();
         $sections = $this->sections;
         return view('customersReport.index', compact(['invoices', 'oldInputs', 'sections']));

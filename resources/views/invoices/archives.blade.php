@@ -104,7 +104,7 @@
                                 </td>
                                 <td class="btn-icon-list">
                                     @can('edit_invoice_status')
-                                    <a href="{{ route('invoices.editStatus' ,$invoice->id) }}"
+                                    <a href="{{ route('invoices.edit_status' ,$invoice->id) }}"
                                         class="btn btn-info btn-sm btn-icon">
                                         <i class="las la-file-invoice-dollar"></i></a>
                                     @endcan

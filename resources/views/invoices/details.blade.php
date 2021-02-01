@@ -238,14 +238,14 @@
                                                             <span style="display: none">
                                                                 {{ $attachemnt_name = str_replace('storage/app/invoices/'.$invoice->invoice_number.'/', '', $attachment->file_path) }}</span>
                                                             @can('show_invoice_attachment')
-                                                            <a href="{{ route('invoiceAttachment.getAttachment' ,[
+                                                            <a href="{{ route('invoiceAttachment.get_attachment' ,[
                                                                 'invoice_number'=>$invoice->invoice_number,
                                                                 'attachment'=>$attachemnt_name ]) }}"
                                                                 class="btn btn-primary btn-sm btn-icon" target="_blank">
                                                                 <i class="typcn typcn-eye-outline"></i></a>
                                                             @endcan
                                                             @can('download_invoice_attachment')
-                                                            <a href="{{ route('invoiceAttachment.downloadAttachment' ,[
+                                                            <a href="{{ route('invoiceAttachment.download_attachment' ,[
                                                                 'invoice_number'=>$invoice->invoice_number,
                                                                 'attachment'=>$attachemnt_name,
                                                                 ]) }}" class="btn btn-info btn-sm btn-icon"

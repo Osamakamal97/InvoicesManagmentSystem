@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InvoiceAttachmentRequest;
 use App\Models\InvoiceAttachment;
 use Exception;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class InvoiceAttachmentController extends Controller

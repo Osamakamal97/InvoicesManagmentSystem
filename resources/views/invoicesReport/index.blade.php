@@ -57,25 +57,10 @@
                         <div class="col-lg-3 mg-t-20 mg-lg-t-0">
                             <label class="rdiobox"><input name="search_type" value="by_invoice_number"
                                     id="invoice_number" type="radio">
-                                <span>{{ __('frontend.search_by_invoice_type') }}</span></label>
+                                <span>{{ __('frontend.search_by_invoice_number') }}</span></label>
                         </div>
                     </div>
-                    <div class="row row-sm" id="invoice_number_search_components" style="display: none">
-                        <div class="form-group col-lg-4">
-                            <label for="invoice_number">{{ __('frontend.invoice_number') }}<span
-                                    class="tx-danger">*</span></label>
-                            <input type="text" name="invoice_number" autofocus
-                                class="form-control @error('invoice_number') parsley-error @enderror"
-                                id="invoice_number" placeholder="{{ __('frontend.invoice_number') }}"
-                                value="{{ old('invoice_number') }}">
-                            @error('invoice_number')
-                            <ul class="parsley-errors-list filled" id="parsley-id-5">
-                                <li class="parsley-required">{{ $message }}</li>
-                            </ul>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="row row-sm" id="invoice_type_search_components">
+                    <div class="row row-sm" id="invoice_type_search_components" style="display: none">
                         <div class="form-group col-lg-4">
                             <label for="invoice_status">{{ __('frontend.payment_status') }}<span
                                     class="tx-danger">*</span></label>
@@ -110,6 +95,22 @@
                                     value="{{ isset($oldInputs['date_range']) && $oldInputs['date_range'] == null ? '01/01/2000 - 01/01/2000' : $oldInputs['date_range'] }}"
                                     autocomplete="off" class="form-control fc-daterangepicker">
                             </div>
+                        </div>
+                    </div>
+                    <div class="row row-sm" id="invoice_number_search_components" >
+                        <div class="form-group col-lg-4">
+                            @livewire('invoice-number-search')
+                            {{-- <label for="invoice_number">{{ __('frontend.invoice_number') }}<span
+                                    class="tx-danger">*</span></label>
+                            <input type="text" name="invoice_number" autofocus
+                                class="form-control @error('invoice_number') parsley-error @enderror"
+                                id="invoice_number" placeholder="{{ __('frontend.invoice_number') }}"
+                                value="{{ old('invoice_number') }}">
+                            @error('invoice_number')
+                            <ul class="parsley-errors-list filled" id="parsley-id-5">
+                                <li class="parsley-required">{{ $message }}</li>
+                            </ul>
+                            @enderror --}}
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary mt-3 mb-0">{{ __('frontend.search') }}</button>

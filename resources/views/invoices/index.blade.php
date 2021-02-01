@@ -155,7 +155,7 @@
                                     @endcan
                                     @else
                                     @can('edit_invoice_payment_status')
-                                    <a href="{{ route('invoices.editStatus' ,$invoice->id) }}"
+                                    <a href="{{ route('invoices.edit_status' ,$invoice->id) }}"
                                         class="btn btn-primary btn-sm btn-icon"
                                         title="{{ __('frontend.edit_payment_status') }}" data-toggle="tooltip"
                                         data-placement="top">

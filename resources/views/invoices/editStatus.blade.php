@@ -42,7 +42,7 @@
                 <h4 class="card-title mb-1">{{ __('frontend.edit_payment_status') }}</h4>
             </div>
             <div class="card-body pt-0">
-                <form action="{{ route('invoices.updateStatus', $invoice->id) }}" method="POST"
+                <form action="{{ route('invoices.update_status', $invoice->id) }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     @method('PUT')

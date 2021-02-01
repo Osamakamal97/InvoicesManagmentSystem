@@ -2,20 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Charts\SampleChart;
-use App\Models\Invoice;
-use App\Models\User;
-use App\Notifications\CreateInvoice;
-use App\Notifications\RealTimeNotification;
-use Carbon\Carbon;
-use Chartisan\PHP\Chartisan;
-use ConsoleTVs\Charts\ChartsController;
-use CreateNotificationsTable;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use mysqli;
-use PhpOffice\PhpSpreadsheet\Helper\Sample;
-
 class HomeController extends Controller
 {
     /**
@@ -35,12 +21,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-
+        // some data for chart
         $paid_invoices_count = invoiceCountByStatus(1);
         $part_paid_invoices_count = invoiceCountByStatus(2);
         $unpaid_invoices_count = invoiceCountByStatus(0);
 
-        $pieChartjs = app()->chartjs
+        $pieChart = app()->chartjs
             ->name('pieChartTest')
             ->type('pie')
             ->size(['width' => 400, 'height' => 200])
@@ -53,7 +39,7 @@ class HomeController extends Controller
             ])
             ->options([]);
 
-        return view('home', compact(['pieChartjs']));
+        return view('home', compact(['pieChart']));
     }
 
 }

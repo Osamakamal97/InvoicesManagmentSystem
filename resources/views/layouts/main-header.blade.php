@@ -65,7 +65,7 @@
                                 <h6 class="dropdown-title mb-1 tx-15 text-white font-weight-semibold">
                                     {{ __('frontend.notifications') }}</h6>
                                 <a class="badge badge-pill badge-warning float-left info-show-nice"
-                                    href="{{ route('notifications.readAll') }}">{{ __('frontend.read_all') }}</a>
+                                    href="{{ route('notifications.read_all') }}">{{ __('frontend.read_all') }}</a>
                             </div>
                             <p class="dropdown-title-text subtext mb-0 text-white op-6 pb-0 tx-12"
                                 id="notifications_count_p">
