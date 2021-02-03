@@ -20,7 +20,6 @@ class Locale
     public function handle(Request $request, Closure $next)
     {
         $locale_languages = config('locale.languages');
-        // dd($locale_languages);
         if (config('locale.status'))
             if (Session::has('locale') && array_key_exists(Session::get('locale'), $locale_languages))
                 App::setlocale(Session::get('locale'));
