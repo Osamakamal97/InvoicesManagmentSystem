@@ -15,12 +15,13 @@ class Section extends Model
     {
         if (auth()->check())
             $this->attributes['created_by'] = auth()->user()->name;
-        $this->attributes['created_by'] = $value;
+        else
+            $this->attributes['created_by'] = $value;
     }
 
     public function getStatus()
     {
-        return $this->status == 0 ? 'معطل' : 'مفعل';
+        return $this->status == 0 ? __('frontend.disable') : __('frontend.enable');
     }
 
     public function products()

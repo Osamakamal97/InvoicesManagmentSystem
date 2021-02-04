@@ -17,8 +17,8 @@ class CreateProductsTable extends Migration
             $table->id();
             $table->string('name', 150);
             $table->text('description')->nullable();
-            $table->unsignedBigInteger('section_id');
-            $table->unsignedTinyInteger('status')->default(1);
+            $table->integer('section_id')->unsigned();
+            $table->integer('status')->unsigned()->default(1);
             $table->foreign('section_id')->references('id')->on('sections')->onDelete('cascade');
             $table->timestamps();
         });

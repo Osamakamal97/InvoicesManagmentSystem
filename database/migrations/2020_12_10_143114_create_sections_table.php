@@ -18,7 +18,7 @@ class CreateSectionsTable extends Migration
             $table->string('name', 100);
             $table->text('description')->nullable();
             $table->string('created_by', 100);
-            $table->unsignedTinyInteger('status')->default(1);
+            $table->integer('status')->default(1)->unsigned();
             $table->timestamps();
         });
     }

@@ -13,7 +13,7 @@ class Product extends Model
 
     public function getStatus()
     {
-        return $this->status == 0 ? 'معطل' : 'مفعل';
+        return $this->status == 0 ? __('frontend.disable') : __('frontend.enable');
     }
 
     public function section()

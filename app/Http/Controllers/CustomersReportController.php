@@ -23,7 +23,7 @@ class CustomersReportController extends Controller
     {
         // with date range
         if ($request->date_range != null) {
-            // Separate two dates then format it with the way that datebase can understand
+            // Separate two dates then format it with the way that database can understand
             $dates = explode('-', $request->date_range);
             $from_date = Carbon::parse($dates[0])->format('Y-m-d');
             $to_date = Carbon::parse($dates[1])->format('Y-m-d');
